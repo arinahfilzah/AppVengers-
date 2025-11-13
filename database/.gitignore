@@ -1,0 +1,21 @@
+# Laravel / Laravel Mix
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/.idea
+/.vscode
+
+# Environment files
+.env
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# SQLite databases
+*.sqlite*
