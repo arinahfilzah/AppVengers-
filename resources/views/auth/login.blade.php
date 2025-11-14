@@ -1,39 +1,59 @@
 @extends('layouts.app')
 
-@section('content')
-<section class="hero text-center">
-    <div class="container">
-        <h1 class="display-6 fw-bold">Welcome Back to StudyBuddy</h1>
-        <p class="lead">Log in to continue your study journey.</p>
-    </div>
-</section>
+@section('title', 'Login')
 
-<section class="py-5 bg-light">
-    <div class="container d-flex justify-content-center">
-        <div class="col-md-6 form-section">
-            <h4 class="mb-3 text-primary fw-bold">Sign In</h4>
-            <form method="POST" action="#">
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" required>
-                </div>
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="remember">
-                    <label for="remember" class="form-check-label">Remember me</label>
-                </div>
-                <div class="text-end mb-3">
-                    <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Log In</button>
-            </form>
-            <p class="mt-3 text-center">Don’t have an account? 
-                <a href="{{ route('home') }}#register-form" class="text-success text-decoration-none">Register</a>
-            </p>
+@section('content')
+<div class="d-flex align-items-center justify-content-center min-vh-100 p-3">
+    <div class="card w-100" style="max-width: 448px;">
+        
+        <div class="card-header bg-white text-center">
+            <h4 class="card-title mb-1">Welcome Back</h4>
+            <p class="card-text text-muted small">Log in to access your account</p>
         </div>
+
+        <div class="card-body">
+
+            {{-- Error --}}
+            @if($errors->has('loginError'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    {{ $errors->first('loginError') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ url('/login') }}">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" placeholder="student@university.edu" required value="{{ old('email') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password *</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember">
+                        <label class="form-check-label">Remember me</label>
+                    </div>
+
+                    <a href="{{ url('/forgot-password') }}" class="text-primary text-decoration-none">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Log in
+                </button>
+            </form>
+        </div>
+
+        <div class="card-footer bg-white text-center">
+            <span class="text-muted small">Don’t have an account?</span>
+            <a href="{{ url('/register') }}" class="ms-1">Register</a>
+        </div>
+
     </div>
-</section>
+</div>
 @endsection

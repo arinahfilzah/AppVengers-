@@ -1,29 +1,53 @@
 @extends('layouts.app')
 
-@section('content')
-<section class="hero text-center">
-    <div class="container">
-        <h1 class="display-6 fw-bold">Forgot Your Password?</h1>
-        <p class="lead">Don’t worry — we’ll help you reset it.</p>
-    </div>
-</section>
+@section('title', 'Forgot Password')
 
-<section class="py-5 bg-light">
-    <div class="container d-flex justify-content-center">
-        <div class="col-md-6 form-section">
-            <h4 class="mb-3 text-warning fw-bold">Reset Link Request</h4>
-            <p class="small text-muted">Enter your email address, and we’ll send you a password reset link.</p>
-            <form method="POST" action="#">
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-warning w-100">Send Reset Link</button>
-            </form>
-            <p class="mt-3 text-center">
-                <a href="{{ route('login') }}" class="text-decoration-none">Back to Login</a>
-            </p>
+@section('content')
+<div class="d-flex align-items-center justify-content-center min-vh-100 p-3">
+    <div class="card w-100" style="max-width: 448px;">
+
+        <div class="card-header bg-white text-center">
+            <h4 class="card-title mb-1">Forgot Password</h4>
+            <p class="card-text text-muted small">Enter your email and we'll send you a reset link</p>
         </div>
+
+        <div class="card-body">
+
+            {{-- Success --}}
+            @if(session('status'))
+                <div class="alert alert-info">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            {{-- Errors --}}
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ url('/forgot-password') }}">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" class="form-control" name="email" placeholder="student@university.edu" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Send Reset Link
+                </button>
+            </form>
+
+        </div>
+
+        <div class="card-footer text-center bg-white">
+            <a href="{{ route('login') }}" class="text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i> Back to Login
+            </a>
+        </div>
+
     </div>
-</section>
+</div>
 @endsection
