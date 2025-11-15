@@ -183,7 +183,7 @@
             <a href="{{ route('home') }}" class="nav-link">Home</a>
         </li>
         <li class="nav-item @if(Request::routeIs('courses')) active @endif">
-            <a href="#" class="nav-link">Courses</a>
+            <a href="/course" class="nav-link">Courses</a>
         </li>
         <li class="nav-item @if(Request::routeIs('about')) active @endif">
             <a href="#" class="nav-link">About</a>

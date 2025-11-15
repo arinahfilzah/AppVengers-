@@ -29,8 +29,8 @@ Route::get('/account', [AuthController::class, 'showUserProfile'])
     ->name('account');
 
 // Other pages
-Route::get('/uploadResource', function () {
-    return view('uploadResource');
+Route::get('/upload-resource', function () {
+    return view('resource.uploadResource');
 })->middleware('auth')->name('uploadResource');
 
 Route::get('/course', function () {
