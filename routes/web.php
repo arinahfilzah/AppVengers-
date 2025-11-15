@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ResourceController;
 
 // -------------------
 // Landing Page
@@ -36,6 +37,9 @@ Route::get('/upload-resource', function () {
 Route::get('/course', function () {
     return view('course');
 })->middleware('auth')->name('course');
+
+Route::post('/upload-resource', [ResourceController::class, 'store'])
+    ->name('resource.store');
 
 // -------------------
 // Authentication Routes
@@ -73,3 +77,5 @@ Route::delete('/account/delete', [AuthController::class, 'deleteAccount'])
 Route::post('/account/update-password', [AuthController::class, 'updatePassword'])
     ->middleware('auth')
     ->name('account.update-password');
+
+

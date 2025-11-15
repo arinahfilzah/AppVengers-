@@ -30,59 +30,61 @@
                 <div class="login-wrap p-4 p-md-5">
                     <h3 class="mb-4">Upload Your Resource</h3>
 
-                    <form action="#" class="upload-form">
-                        <div class="form-group">
-                            <label for="file1">Upload File</label>
-                            <input type="file" class="form-control" id="file1" accept=".pdf,.docx,.pptx,.zip" required>
-                        </div>
+                   <form action="{{ route('resource.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
-                        <div class="form-group">
-                            <label for="title">Resource Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Enter resource title" required>
-                        </div>
+    <div class="form-group">
+        <label for="file1">Upload File</label>
+        <input type="file" class="form-control" name="file1" id="file1" required>
+    </div>
 
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" rows="3" placeholder="Enter resource description"></textarea>
-                        </div>
+    <div class="form-group">
+        <label>Resource Title</label>
+        <input type="text" class="form-control" name="title" required>
+    </div>
 
-                        <div class="form-group">
-                            <label for="category">Select Category</label>
-                            <select class="form-control" id="category">
-                                <option>Software Engineering</option>
-                                <option>Data Engineering</option>
-                                <option>Computer Network & Security</option>
-                                <option>Bioinformatic</option>
-                                <option>Graphic & Multimedia</option>
-                            </select>
-                        </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" name="description"></textarea>
+    </div>
 
-                        <div class="form-group">
-                            <label for="year">Select Year</label>
-                            <select class="form-control" id="year">
-                                <option>Year 1</option>
-                                <option>Year 2</option>
-                                <option>Year 3</option>
-                                <option>Year 4</option>
-                            </select>
-                        </div>
+    <div class="form-group">
+        <label>Category</label>
+        <select class="form-control" name="category">
+            <option>Software Engineering</option>
+            <option>Data Engineering</option>
+            <option>Computer Network & Security</option>
+            <option>Bioinformatic</option>
+            <option>Graphic & Multimedia</option>
+        </select>
+    </div>
 
-                        <div class="form-group">
-                            <label for="subject">Select Subject</label>
-                            <select class="form-control" id="subject">
-                                <option>Discrete Structure</option>
-                                <option>Programming Technique I</option>
-                                <option>Technology & Information System</option>
-                                <option>Digital Logic</option>
-                                <option value="add_new">+ ADD NEW SUBJECT</option>
-                            </select>
-                        </div>
+    <div class="form-group">
+        <label>Year</label>
+        <select class="form-control" name="year">
+            <option>Year 1</option>
+            <option>Year 2</option>
+            <option>Year 3</option>
+            <option>Year 4</option>
+        </select>
+    </div>
 
-                        <div class="form-group d-flex justify-content-end mt-4">
-                                <button type="submit" class="btn btn-primary submit">
-                                    <span class="fa fa-upload"></span> Upload
-                                </button>
-                            </div>
+    <div class="form-group">
+        <label>Subject</label>
+        <select class="form-control" name="subject">
+            <option>Discrete Structure</option>
+            <option>Programming Technique I</option>
+            <option>Technology & Information System</option>
+            <option>Digital Logic</option>
+            <option value="add_new">+ ADD NEW SUBJECT</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary submit">
+        <span class="fa fa-upload"></span> Upload
+    </button>
+</form>
+
                     </form>
 
                 </div>
