@@ -175,6 +175,9 @@
             <a href="{{ route('uploadResource') }}" class="nav-link">Upload Resources</a>
         </li>
         <li class="nav-item @if(Request::routeIs('account')) active @endif">
+            <a href="{{ route('manageResource') }}" class="nav-link">Manage Resource</a>
+        </li>
+        <li class="nav-item @if(Request::routeIs('account')) active @endif">
             <a href="{{ route('account') }}" class="nav-link">Profile</a>
         </li>
 

@@ -41,6 +41,15 @@ Route::get('/course', function () {
 Route::post('/upload-resource', [ResourceController::class, 'store'])
     ->name('resource.store');
 
+Route::get('/manage-resource', [ResourceController::class, 'manageResource'])
+    ->name('manageResource');
+
+Route::get('/resource/{id}/edit', [ResourceController::class, 'edit'])
+    ->name('resource.edit');
+
+Route::put('/resource/{id}', [ResourceController::class, 'update'])
+    ->name('resource.update');
+
 // -------------------
 // Authentication Routes
 // -------------------

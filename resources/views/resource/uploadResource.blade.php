@@ -36,11 +36,17 @@
     <div class="form-group">
         <label for="file1">Upload File</label>
         <input type="file" class="form-control" name="file1" id="file1" required>
+        @error('file1')
+            <div class="text-danger mt-1">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="form-group">
         <label>Resource Title</label>
         <input type="text" class="form-control" name="title" required>
+        @error('title')
+            <div class="text-danger mt-1">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="form-group">
@@ -61,7 +67,7 @@
 
     <div class="form-group">
         <label>Year</label>
-        <select class="form-control" name="year">
+        <select class="form-control" name="year" required>
             <option>Year 1</option>
             <option>Year 2</option>
             <option>Year 3</option>
@@ -71,7 +77,7 @@
 
     <div class="form-group">
         <label>Subject</label>
-        <select class="form-control" name="subject">
+        <select class="form-control" name="subject" required>
             <option>Discrete Structure</option>
             <option>Programming Technique I</option>
             <option>Technology & Information System</option>
@@ -86,6 +92,21 @@
 </form>
 
                     </form>
+
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    
+                    @if(session('success'))
+                    <script>
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    timer: 2000,
+                    showConfirmButton: false
+                    });
+                    </script>
+                    @endif
+
 
                 </div>
             </div>
