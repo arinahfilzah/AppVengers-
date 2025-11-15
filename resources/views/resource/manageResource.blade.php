@@ -38,7 +38,7 @@
             </script>
 
             <div class="text-center mt-5">
-                <a href="{{ route('resource.upload') }}" class="btn btn-primary">
+                <a href="{{ route('uploadResource') }}" class="btn btn-primary">
                     Upload Your First Resource
                 </a>
             </div>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 
+
 // -------------------
 // Landing Page
 // -------------------
@@ -39,7 +40,7 @@ Route::get('/course', function () {
 })->middleware('auth')->name('course');
 
 Route::post('/upload-resource', [ResourceController::class, 'store'])
-    ->name('resource.store');
+    ->name('uploadResource.store');
 
 Route::get('/manage-resource', [ResourceController::class, 'manageResource'])
     ->name('manageResource');
@@ -49,6 +50,14 @@ Route::get('/resource/{id}/edit', [ResourceController::class, 'edit'])
 
 Route::put('/resource/{id}', [ResourceController::class, 'update'])
     ->name('resource.update');
+
+Route::get('/upload-resource', [ResourceController::class, 'showUploadForm'])
+    ->name('uploadResource');
+
+Route::get('/upload-resource', [ResourceController::class, 'create'])
+    ->name('uploadResource');
+
+
 
 // -------------------
 // Authentication Routes

@@ -88,4 +88,16 @@ public function update(Request $request, $id)
     return redirect()->route('manageResource')->with('success', 'Resource updated successfully!');
 }
 
+public function showUploadForm()
+{
+    return view('resource.uploadResource');
+}
+
+public function create()
+{
+    return view('resource.uploadResource');
+}
+
+
+
 }

@@ -30,7 +30,7 @@
                 <div class="login-wrap p-4 p-md-5">
                     <h3 class="mb-4">Upload Your Resource</h3>
 
-                   <form action="{{ route('resource.store') }}" method="POST" enctype="multipart/form-data">
+                   <form action="{{ route('uploadResource.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="form-group">
@@ -94,7 +94,7 @@
                     </form>
 
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                    
+
                     @if(session('success'))
                     <script>
                     Swal.fire({
