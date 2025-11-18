@@ -130,11 +130,6 @@
     </div>
 </section>
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 6af51551c6c7edfe7b3354c8b3ca1116b1782e6d
 <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
         <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" />
@@ -142,7 +137,7 @@
     </svg>
 </div>
 
-<<<<<<< HEAD
+
 @push('scripts')
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
