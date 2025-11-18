@@ -93,11 +93,25 @@ public function showUploadForm()
     return view('resource.uploadResource');
 }
 
-public function create()
+
+public function destroy($id)
 {
-    return view('resource.uploadResource');
+    $resource = Resource::findOrFail($id);
+
+    // Delete file from storage if exists
+    if ($resource->file_path && file_exists(storage_path('app/public/uploads/' . $resource->file_path))) {
+        unlink(storage_path('app/public/uploads/' . $resource->file_path));
+    }
+
+    // Delete the resource from database
+    $resource->delete();
+
+    return redirect()->route('manageResource')->with('success', 'Resource deleted successfully!');
 }
 
 
 
+
 }
+
+
