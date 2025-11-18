@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\AdminController;
 
 
 // -------------------
@@ -96,4 +97,31 @@ Route::post('/account/update-password', [AuthController::class, 'updatePassword'
     ->middleware('auth')
     ->name('account.update-password');
 
+Route::get('/adminpage', function () {
+    return view('adminpage');
+});
 
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('dashboard');
+
+Route::get('/admin/contributors', function () {
+    return view('admin.contributors');
+})->name('contributors');
+
+Route::get('/admin/activity', function () {
+    return view('admin.activity');
+})->name('activity');
+
+Route::get('/admin/reports', function () {
+    return view('admin.reports');
+})->name('reports');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/adminpage', [AdminController::class, 'index'])->name('adminpage');
+    Route::get('/admin/contributors', [AdminController::class, 'contributors'])->name('contributors');
+    Route::get('/admin/activity', [AdminController::class, 'activity'])->name('activity');
+    Route::get('/admin/analytics', [AdminController::class, 'analytics'])->name('analytics');
+    Route::get('/admin/reports', [AdminController::class, 'reports'])->name('reports');
+    Route::get('/admin/settings', [AdminController::class, 'settings'])->name('settings');
+});
