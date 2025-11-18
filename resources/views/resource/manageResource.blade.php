@@ -4,7 +4,6 @@
 
 @section('content')
 
-
     <div class="overlay"></div>
     <div class="container text-center">
         <h1 class="mt-5 text-dark purple">Manage Uploaded Resources</h1>

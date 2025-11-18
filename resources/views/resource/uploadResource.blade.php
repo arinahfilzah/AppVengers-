@@ -3,18 +3,6 @@
 @section('title', 'Upload Resource')
 
 @section('content')
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}"><span>Study</span>Buddy</a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
-            <span class="oi oi-menu"></span> Menu
-        </button>
-
-        
-    </div>
-</nav>
-
 <div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('studylab/images/softpurple.jpg') }}');">
     <div class="overlay"></div>
     <div class="container"></div>
@@ -76,15 +64,42 @@
     </div>
 
     <div class="form-group">
-        <label>Subject</label>
-        <select class="form-control" name="subject" required>
-            <option>Discrete Structure</option>
-            <option>Programming Technique I</option>
-            <option>Technology & Information System</option>
-            <option>Digital Logic</option>
-            <option value="add_new">+ ADD NEW SUBJECT</option>
-        </select>
-    </div>
+    <label>Subject</label>
+    <select class="form-control subject-select" name="subject" required>
+        <option value="" disabled selected>Select or search subject</option>
+
+        <!-- Existing subjects -->
+        <option>Discrete Structure</option>
+        <option>Programming Technique I</option>
+        <option>Programming Technique II</option>
+        <option>Technology & Information System</option>
+        <option>Digital Logic</option>
+        <option>Integrity and Anti-Corruption</option>
+        <option>Computational Mathematics</option>
+        <option>Software Engineering</option>
+        <option>Probability & Statiscal Data Analysis</option>
+        <option>Computer Organisation & Architecture</option>
+        <option>Database</option>
+        <option>System Analysis & Design</option>
+        <option>Data Structure & Algoritm</option>
+        <option>Network Communications</option>
+        <option>Computer Security</option>
+        <option>Human Computer Interaction</option>
+        <option>Object-Oriented Programming</option>
+        <option>Requirements Engineering & Software Modelling</option>
+        <option>Theory of Computer Science</option>
+        <option>Operating Systems</option>
+        <option>Web Programming</option>
+        <option>Application Development</option>
+        <option>Professional Communication Skill I</option>
+        <option>Professional Communication Skill II</option>
+        <option>Professional Communication Skill III</option>
+
+        <!-- Add new button -->
+        <option value="add_new">+ Add New Subject</option>
+    </select>
+</div>
+
 
     <button type="submit" class="btn btn-primary submit">
         <span class="fa fa-upload"></span> Upload
@@ -115,83 +130,40 @@
     </div>
 </section>
 
-<footer class="ftco-footer ftco-no-pt">
-    <div class="container">
-        <div class="row mb-5">
-
-            <div class="col-md pt-5">
-                <div class="ftco-footer-widget pt-md-5 mb-4">
-                    <h2>About</h2>
-                    <p>Far far away, behind the word mountains...</p>
-
-                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft">
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-instagram"></span></a></li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="col-md pt-5">
-                <div class="ftco-footer-widget pt-md-5 mb-4 ml-md-5">
-                    <h2>Help Desk</h2>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="py-2 d-block">Customer Care</a></li>
-                        <li><a href="#" class="py-2 d-block">Legal Help</a></li>
-                        <li><a href="#" class="py-2 d-block">Services</a></li>
-                        <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
-                        <li><a href="#" class="py-2 d-block">Refund Policy</a></li>
-                        <li><a href="#" class="py-2 d-block">Call Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md pt-5">
-                <div class="ftco-footer-widget pt-md-5 mb-4">
-                    <h2>Recent Courses</h2>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="py-2 d-block">Computer Engineering</a></li>
-                        <li><a href="#" class="py-2 d-block">Web Design</a></li>
-                        <li><a href="#" class="py-2 d-block">Business Studies</a></li>
-                        <li><a href="#" class="py-2 d-block">Civil Engineering</a></li>
-                        <li><a href="#" class="py-2 d-block">Computer Technician</a></li>
-                        <li><a href="#" class="py-2 d-block">Web Developer</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md pt-5">
-                <div class="ftco-footer-widget pt-md-5 mb-4">
-                    <h2>Have a Question?</h2>
-                    <ul>
-                        <li><span class="fa fa-map-marker"></span> 203 Fake St., San Francisco</li>
-                        <li><span class="fa fa-phone"></span> +2 392 3929 210</li>
-                        <li><span class="fa fa-paper-plane"></span> info@yourdomain.com</li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <p>
-                    Copyright &copy;
-                    <script>document.write(new Date().getFullYear());</script> All rights reserved
-                </p>
-            </div>
-        </div>
-
-    </div>
-</footer>
-
 <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
         <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" />
         <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" />
     </svg>
 </div>
+
+
+@push('scripts')
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.subject-select').select2({
+            placeholder: "Select or search subject",
+            width: '100%'
+        });
+
+        $('.subject-select').on('change', function () {
+            if ($(this).val() === 'add_new') {
+                alert("You selected: Add New Subject");
+                // Here you can open a modal or redirect to page
+            }
+        });
+    });
+</script>
+@endpush
 
 
 @endsection

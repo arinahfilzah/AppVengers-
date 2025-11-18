@@ -54,8 +54,9 @@ Route::put('/resource/{id}', [ResourceController::class, 'update'])
 Route::get('/upload-resource', [ResourceController::class, 'showUploadForm'])
     ->name('uploadResource');
 
-Route::get('/upload-resource', [ResourceController::class, 'create'])
-    ->name('uploadResource');
+Route::delete('/resource/{id}', [ResourceController::class, 'destroy'])
+    ->name('resource.destroy');
+
 
 
 
