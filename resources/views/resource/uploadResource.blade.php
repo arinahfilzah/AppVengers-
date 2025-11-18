@@ -166,7 +166,4 @@
 @endpush
 
 
-
-=======
->>>>>>> 6af51551c6c7edfe7b3354c8b3ca1116b1782e6d
 @endsection
