@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\AdminController;
 
-
 // -------------------
 // Landing Page
 // -------------------
