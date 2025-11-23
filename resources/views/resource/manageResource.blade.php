@@ -4,10 +4,16 @@
 
 @section('content')
 
-    <div class="overlay"></div>
-    <div class="container text-center">
-        <h1 class="mt-5 text-dark purple">Manage Uploaded Resources</h1>
+<section class="page-header" >
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 pb-5 text-center">
+                <h1 class="mb-0 bread">Manage Uploaded Resources</h1>
+            </div>
+        </div>
     </div>
+</section>
+
 
 
 <section class="ftco-section bg-light">
