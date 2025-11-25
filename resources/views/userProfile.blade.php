@@ -26,7 +26,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
-    
+
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
@@ -138,22 +138,21 @@
                     Danger Zone
                 </div>
                 <div class="card-body">
-
                     <p class="text-muted mb-3">Deleting your account is permanent and cannot be undone.</p>
 
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        <i class="bi bi-trash me-1"></i>
-                        Delete Account
+                    <!-- Delete Button triggers Modal -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash me-1"></i> Delete Account
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="deleteModal">
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                
+
                                 <div class="modal-header">
-                                    <h5 class="modal-title text-danger">Are you absolutely sure?</h5>
-                                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    <h5 class="modal-title text-danger" id="deleteModalLabel">Are you absolutely sure?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
                                 <div class="modal-body">
@@ -166,14 +165,13 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
+                                    <!-- DELETE FORM -->
                                     <form method="POST" action="{{ route('account.delete') }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            Yes, delete my account
-                                        </button>
+                                        <button type="submit" class="btn btn-danger">Yes, delete my account</button>
                                     </form>
                                 </div>
 
@@ -195,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let hash = window.location.hash;
 
     @if($errors->any() || session('password_success'))
-        hash = '#settings';
+        hash = '#settingsTab';
     @endif
 
     if (hash) {

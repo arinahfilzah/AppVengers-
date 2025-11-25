@@ -227,7 +227,8 @@
     <script src="{{ asset('studylab/js/jquery.min.js') }}"></script>
     <script src="{{ asset('studylab/js/jquery-migrate-3.0.1.min.js') }}"></script>
     <script src="{{ asset('studylab/js/popper.min.js') }}"></script>
-    <script src="{{ asset('studylab/js/bootstrap.min.js') }}"></script>
+    <!-- Bootstrap 5 Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('studylab/js/jquery.easing.1.3.js') }}"></script>
     <script src="{{ asset('studylab/js/jquery.waypoints.min.js') }}"></script>
     <script src="{{ asset('studylab/js/jquery.stellar.min.js') }}"></script>
