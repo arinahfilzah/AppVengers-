@@ -1,6 +1,6 @@
 ## AppVengers Member
 
-<h4>Daveloper : ARINAH FILZAH BINTI ROSLI </h4>
+<h4>Developer : ARINAH FILZAH BINTI ROSLI </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -55,7 +55,7 @@
   </tr>
 </table>
 
-<h4>Daveloper : ABID HUMAYRAA BINTI HARDISURA </h4>
+<h4>Developer : ABID HUMAYRAA BINTI HARDISURA </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -80,7 +80,7 @@
   </tr>
 </table>
 
-<h4>Daveloper : NUR AYUNI BINTI NOOR AZMAN  </h4>
+<h4>Developer : NUR AYUNI BINTI NOOR AZMAN  </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -105,7 +105,7 @@
   </tr>
 </table>
 
-<h4>Daveloper : AINNUR ASHIKIN BINTI ASDAR </h4>
+<h4>Developer : AINNUR ASHIKIN BINTI ASDAR </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
