@@ -67,9 +67,11 @@
 
    <tr>
     <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;"></td>
+    <td style="border: 1px solid #999; padding: 8px;">Dashboard Overview and Statistics Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <ul>
+      <li><a href="resources/views/admin/adminpage.blade.php"> Dashboard Overview Page </a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
         <a href=""></a>
