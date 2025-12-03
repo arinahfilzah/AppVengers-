@@ -98,15 +98,21 @@
     <td style="border: 1px solid #999; padding: 8px;">1</td>
     <td style="border: 1px solid #999; padding: 8px;">Upload Resource & Categorize Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="resources/views/resource/editResource.blade.php"> Edit Resource View</a>
-      <a href="resources/views/resource/manageResource.blade.php"> Manage Resource View</a>
-      <a href="resources/views/resource/uploadResource.blade.php"> Upload Resource View</a>  
+    <ul>
+      <li></li><a href="resources/views/resource/editResource.blade.php"> Edit Resource View</a></li>
+      <li><a href="resources/views/resource/manageResource.blade.php"> Manage Resource View</a></li>
+      <li><a href="resources/views/resource/uploadResource.blade.php"> Upload Resource View</a></li>  
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="app/Http/Controllers/ResourceController.php"> Resource Controller</a>
+    <ul>
+      <li><a href="app/Http/Controllers/ResourceController.php"> Resource Controller</a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="app/Models/Resource.php"> Resource Database</a>
+    <ul>
+      <li><a href="app/Models/Resource.php"> Resource Database</a></li>
+    </ul>
     </td>
   </tr>
 </table>
