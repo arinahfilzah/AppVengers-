@@ -8,37 +8,113 @@
 </p>
 
 ## AppVengers Member
+
+<h4>Daveloper : ARINAH FILZAH BINTI ROSLI </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
-    <th style="border: 1px solid #999; padding: 8px;">ARINAH FILZAH BINTI ROSLI</th>
-    <th style="border: 1px solid #999; padding: 8px;">Student ID</th>
-    <th style="border: 1px solid #999; padding: 8px;">File Link</th>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
   </tr>
 
-  <tr>
-    <td style="border: 1px solid #999; padding: 8px;">ABID HUMAYRAA BINTI HARDISURA </td>
-    <td style="border: 1px solid #999; padding: 8px;">123456</td>
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;"></td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="https://github.com/...">PaymentServlet.java</a>
+      <a href=""></a>
     </td>
-  </tr>
-
-  <tr>
-    <td style="border: 1px solid #999; padding: 8px;">NUR AYUNI BINTI NOOR AZMAN</td>
-    <td style="border: 1px solid #999; padding: 8px;">234567</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="https://github.com/...">CustomerDetail.jsp</a>
+      <a href=""></a>
     </td>
-  </tr>
-
-  <tr>
-    <td style="border: 1px solid #999; padding: 8px;">AINNUR ASHIKIN BINTI ASDAR</td>
-    <td style="border: 1px solid #999; padding: 8px;">345678</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="https://github.com/...">ForumController.java</a>
+      <a href=""></a>
     </td>
   </tr>
 </table>
+
+<h4>Daveloper : ABID HUMAYRAA BINTI HARDISURA </h4>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;"></td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+</table>
+
+<h4>Daveloper : NUR AYUNI BINTI NOOR AZMAN  </h4>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;"></td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+</table>
+
+<h4>Daveloper : AINNUR ASHIKIN BINTI ASDAR </h4>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;">Upload Resource & Categorize Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href="resources/views/resource/editResource.blade.php"> Edit Resource View</a>
+      <a href="resources/views/resource/manageResource.blade.php"> Manage Resource View</a>
+      <a href="resources/views/resource/uploadResource.blade.php"> Upload Resource View</a>  
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href="app/Http/Controllers/ResourceController.php"> Resource Controller</a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href="app/Models/Resource.php"> Resource Database</a>
+    </td>
+  </tr>
+</table>
+
+
+
+ 
+
 
 
 ## About Laravel
