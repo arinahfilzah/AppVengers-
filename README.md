@@ -74,7 +74,7 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href=""></a>
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>
