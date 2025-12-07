@@ -30,6 +30,25 @@ Route::get('/account', [AuthController::class, 'showUserProfile'])
     ->middleware('auth')
     ->name('account');
 
+// Profile Update
+Route::post('/account/update-profile', [AuthController::class, 'updateProfile'])
+    ->middleware('auth')
+    ->name('account.update-profile');
+
+// Delete Account
+Route::delete('/account/delete', [AuthController::class, 'deleteAccount'])
+    ->middleware('auth')
+    ->name('account.delete');
+
+// Update Password from Profile Settings
+Route::post('/account/update-password', [AuthController::class, 'updatePassword'])
+    ->middleware('auth')
+    ->name('account.update-password');
+// Login History
+Route::get('/account/login-history-data', [AuthController::class, 'loginHistoryData'])
+    ->middleware('auth')
+    ->name('account.login-history-data');
+
 // Other pages
 Route::get('/upload-resource', function () {
     return view('resource.uploadResource');
@@ -90,23 +109,13 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Delete Account
-Route::delete('/account/delete', [AuthController::class, 'deleteAccount'])
-    ->middleware('auth')
-    ->name('account.delete');
-
-// Update Password from Profile Settings
-Route::post('/account/update-password', [AuthController::class, 'updatePassword'])
-    ->middleware('auth')
-    ->name('account.update-password');
-
 Route::get('/adminpage', function () {
     return view('adminpage');
 });
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
-})->name('dashboard');
+})->name('admin.dashboard');
 
 Route::get('/admin/contributors', function () {
     return view('admin.contributors');

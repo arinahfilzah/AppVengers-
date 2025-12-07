@@ -39,6 +39,11 @@
                 <i class="bi bi-gear me-1"></i> Settings
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if(session('active_tab')=='loginHistory') active @endif" data-bs-toggle="tab" href="#loginHistoryTab">
+                <i class="bi bi-clock-history me-1"></i> Login Activity
+            </a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -50,54 +55,48 @@
                     <h5 class="mb-0">Profile Information</h5>
                 </div>
                 <div class="card-body">
-
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="text-muted small">Full Name</label>
-                            <input class="form-control" value="{{ auth()->user()->name ?? 'Not provided' }}" readonly>
+                    <form method="POST" action="{{ route('account.update-profile') }}">
+                        @csrf
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small">Full Name</label>
+                                <input class="form-control" name="name" value="{{ auth()->user()->name }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small">Email</label>
+                                <input class="form-control" name="email" value="{{ auth()->user()->email }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small">Role</label>
+                                <input class="form-control" value="{{ auth()->user()->role }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small">Last Login</label>
+                                <input class="form-control" 
+                                    value="{{ optional(auth()->user()->last_login) ? auth()->user()->last_login->format('d M Y H:i') : 'N/A' }}" 
+                                    readonly>
+                            </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <label class="text-muted small">Email</label>
-                            <input class="form-control" value="{{ auth()->user()->email ?? 'Not provided' }}" readonly>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="text-muted small">Role</label>
-                            <input class="form-control" value="{{ auth()->user()->role ?? 'Not provided' }}" readonly>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="text-muted small">Last Login</label>
-                            <input class="form-control" 
-                                value="{{ auth()->user()->last_login ? auth()->user()->last_login->format('d M Y H:i') : 'N/A' }}" 
-                                readonly>
-                        </div>
-                    </div>
-
+                        <button class="btn btn-primary mt-3">Save Changes</button>
+                    </form>
                 </div>
             </div>
-        </div>
+        </div> <!-- End Profile Tab -->
 
         {{-- Settings Tab --}}
         <div class="tab-pane fade @if(session('active_tab')=='settings') show active @endif" id="settingsTab">
-
             {{-- Change Password --}}
             <div class="card mb-4">
                 <div class="card-header bg-white">
                     <h5 class="mb-0">Change Password</h5>
                 </div>
                 <div class="card-body">
-
-                    {{-- Success Message --}}
                     @if(session('password_success'))
                         <div class="alert alert-success">
                             <i class="bi bi-check-circle me-1"></i>
                             {{ session('password_success') }}
                         </div>
                     @endif
-
-                    {{-- Validation Errors --}}
                     @if($errors->any())
                         <div class="alert alert-danger">
                             <i class="bi bi-exclamation-circle me-1"></i>
@@ -108,11 +107,9 @@
                             </ul>
                         </div>
                     @endif
-
                     <form method="POST" action="{{ route('account.update-password') }}">
                         @csrf
                         <input type="hidden" name="tab" value="settingsTab">
-
                         <div class="mb-3">
                             <label class="form-label">New Password *</label>
                             <input type="password" name="new_password" class="form-control" required>
@@ -120,15 +117,12 @@
                                 At least 8 characters with uppercase, lowercase, and number.
                             </small>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Confirm New Password *</label>
                             <input type="password" name="new_password_confirmation" class="form-control" required>
                         </div>
-
                         <button class="btn btn-primary w-100">Update Password</button>
                     </form>
-
                 </div>
             </div>
 
@@ -139,22 +133,16 @@
                 </div>
                 <div class="card-body">
                     <p class="text-muted mb-3">Deleting your account is permanent and cannot be undone.</p>
-
-                    <!-- Delete Button triggers Modal -->
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                         <i class="bi bi-trash me-1"></i> Delete Account
                     </button>
-
-                    <!-- Modal -->
                     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-
                                 <div class="modal-header">
                                     <h5 class="modal-title text-danger" id="deleteModalLabel">Are you absolutely sure?</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-
                                 <div class="modal-body">
                                     <p>Deleting your account will:</p>
                                     <ul>
@@ -163,47 +151,118 @@
                                         <li>Cannot be undone</li>
                                     </ul>
                                 </div>
-
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                                    <!-- DELETE FORM -->
                                     <form method="POST" action="{{ route('account.delete') }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Yes, delete my account</button>
                                     </form>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div> <!-- End Settings Tab -->
 
+        {{-- Login Activity Tab --}}
+        <div class="tab-pane fade @if(session('active_tab')=='loginHistory') show active @endif" id="loginHistoryTab">
+
+            {{-- Chart --}}
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Login Activity Chart</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="loginChart" height="100"></canvas>
                 </div>
             </div>
 
-        </div> <!-- End Settings Tab -->
+            {{-- Table --}}
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Recent Login Activity</h5>
+                </div>
+                <div class="card-body">
+                    @if(isset($loginHistory) && count($loginHistory) > 0)
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>IP Address</th>
+                                        <th>Device / Browser</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($loginHistory as $log)
+                                        <tr>
+                                            <td>{{ optional($log->logged_in_at instanceof \Carbon\Carbon ? $log->logged_in_at : \Illuminate\Support\Carbon::parse($log->logged_in_at))->format('d M Y, H:i A') }}</td>
+                                            <td>{{ $log->ip_address }}</td>
+                                            <td>{{ $log->user_agent }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-muted">No login history recorded.</p>
+                    @endif
+                </div>
+            </div>
 
-    </div> <!-- End Tab Content -->
+        </div> <!-- End Login Activity Tab -->
 
-</div>
+    </div> <!-- End tab-content -->
+</div> <!-- End container -->
 
+{{-- Tabs JS --}}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     let hash = window.location.hash;
-
     @if($errors->any() || session('password_success'))
         hash = '#settingsTab';
     @endif
-
+    @if(session('active_tab') == 'loginHistory')
+        hash = '#loginHistoryTab';
+    @endif
     if (hash) {
         const tabTriggerEl = document.querySelector(`a.nav-link[href="${hash}"]`);
-        if (tabTriggerEl) {
-            const tab = new bootstrap.Tab(tabTriggerEl);
-            tab.show();
-        }
+        if (tabTriggerEl) new bootstrap.Tab(tabTriggerEl).show();
     }
 });
+</script>
+
+{{-- Chart.js --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("{{ route('account.login-history-data') }}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = Object.keys(data);
+            const counts = Object.values(data);
+            const ctx = document.getElementById('loginChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Logins per Day',
+                        data: counts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true }, tooltip: { enabled: true } },
+                    scales: { y: { beginAtZero: true, precision: 0 } }
+                }
+            });
+        });
 </script>
 
 @endsection

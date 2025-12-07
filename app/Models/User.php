@@ -45,4 +45,13 @@ class User extends Authenticatable
         'last_login' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Login History Relationship
+     * UC09 – A user can have many login history records
+     */
+    public function loginHistories()
+    {
+        return $this->hasMany(LoginHistory::class);
+    }
 }
