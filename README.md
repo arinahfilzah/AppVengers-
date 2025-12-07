@@ -94,12 +94,12 @@
 
    <tr>
     <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;"></td>
+    <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <a href=""> Search and Filter Page </a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>
