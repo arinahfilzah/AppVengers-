@@ -23,7 +23,14 @@ class User extends Authenticatable
         'password',
         'role',
         'last_login',
-    ];
+        'session_timeout',
+        'recovery_email',
+        'recovery_phone',
+        'trusted_devices',
+        'security_notifications',
+        'profile_picture',
+        'phone_number',
+    ];    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,8 +50,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
-        'password' => 'hashed',
-    ];
+        'trusted_devices' => 'array',
+        'security_notifications' => 'boolean',
+    ];    
 
     /**
      * Login History Relationship

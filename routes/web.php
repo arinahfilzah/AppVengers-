@@ -35,6 +35,11 @@ Route::post('/account/update-profile', [AuthController::class, 'updateProfile'])
     ->middleware('auth')
     ->name('account.update-profile');
 
+//Security Preferences 
+Route::post('/account/security-preferences', [AuthController::class, 'updateSecurityPreferences'])
+    ->middleware('auth')
+    ->name('account.update-security');
+
 // Delete Account
 Route::delete('/account/delete', [AuthController::class, 'deleteAccount'])
     ->middleware('auth')
