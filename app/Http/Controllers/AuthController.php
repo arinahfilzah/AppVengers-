@@ -215,7 +215,7 @@ class AuthController extends Controller
             $file = $request->file('profile_picture');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/profile_pictures'), $filename);
-            $user->profile_picture = 'uploads/profile_pictures/' . $filename;
+            $user->profile_picture = $filename;
         }
 
         $user->name = $request->name;
@@ -265,42 +265,42 @@ class AuthController extends Controller
             'session_timeout' => 'required|integer|min:5|max:120',
             'recovery_email' => 'nullable|email',
             'recovery_phone' => 'nullable|regex:/^[0-9]{10,12}$/',
-            'security_notifications' => 'nullable|boolean',
+            'security_notifications' => 'sometimes|in:on,1,true,false,0', // FIXED
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->route('account')
                             ->withErrors($validator, 'security')
                             ->with('active_tab', 'settings');
         }
-
+    
         $user = Auth::user();
         $trustedDevices = $user->trusted_devices ?? [];
-        
-        // Remove device if requested
+    
+        // Remove device
         if ($request->has('remove_device')) {
             unset($trustedDevices[$request->remove_device]);
             $user->trusted_devices = array_values($trustedDevices);
             $user->save();
-        
+    
             return redirect()->route('account')
                              ->with('security_success', 'Trusted device removed.')
                              ->with('active_tab', 'settings');
         }
-        
-        // Otherwise, update preferences
+    
+        // Update preferences
         $user->update([
             'session_timeout' => $request->session_timeout,
             'recovery_email' => $request->recovery_email,
             'recovery_phone' => $request->recovery_phone,
-            'security_notifications' => $request->has('security_notifications'),
+            'security_notifications' => $request->has('security_notifications'), // TRUE/FALSE
             'trusted_devices' => $trustedDevices,
         ]);
-        
+    
         return redirect()->route('account')
                          ->with('success', 'Security preferences updated!')
-                         ->with('active_tab', 'settings');        
-    }
+                         ->with('active_tab', 'settings');
+    }    
 
     //  Return JSON data for login history chart
     public function loginHistoryData()

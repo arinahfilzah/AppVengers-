@@ -232,11 +232,18 @@
                                    class="form-control">
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input"
-                                   name="security_notifications"
-                                   {{ auth()->user()->security_notifications ? 'checked' : '' }}>
-                            <label class="form-check-label">Receive security alerts</label>
+                        <div class="form-check mt-3">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="security_notifications" 
+                                name="security_notifications"
+                                value="1"
+                                {{ old('security_notifications', $user->security_notifications) ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label" for="security_notifications">
+                                Receive security notifications
+                            </label>
                         </div>
 
                         <h6 class="mt-4">Trusted Devices</h6>
