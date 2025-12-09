@@ -183,92 +183,113 @@
             </div>
 
             {{-- Security Preferences --}}
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Security Preferences</h5>
-                </div>
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Security Preferences</h5>
+    </div>
 
-                <div class="card-body">
+    <div class="card-body">
 
-                {{-- Security Success --}}
-                @if(session('security_success'))
-                    <div class="alert alert-success mb-3">
-                        {{ session('security_success') }}
-                    </div>
-                @endif
-
-                {{-- Security Validation Errors --}}
-                @if($errors->hasBag('security') && $errors->security->any())
-                        <div class="alert alert-danger mb-3">
-                            <ul class="mb-0">
-                                @foreach ($errors->security->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('account.update-security') }}">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label class="form-label">Session Timeout (minutes)</label>
-                            <input type="number" name="session_timeout"
-                                   value="{{ auth()->user()->session_timeout }}"
-                                   class="form-control" min="5" max="120" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Recovery Email</label>
-                            <input type="email" name="recovery_email"
-                                   value="{{ auth()->user()->recovery_email }}"
-                                   class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Recovery Phone (10-12 digits)</label>
-                            <input type="text" name="recovery_phone"
-                                   value="{{ auth()->user()->recovery_phone }}"
-                                   class="form-control">
-                        </div>
-
-                        <div class="form-check mt-3">
-                            <input 
-                                type="checkbox" 
-                                class="form-check-input" 
-                                id="security_notifications" 
-                                name="security_notifications"
-                                value="1"
-                                {{ old('security_notifications', $user->security_notifications) ? 'checked' : '' }}
-                            >
-                            <label class="form-check-label" for="security_notifications">
-                                Receive security notifications
-                            </label>
-                        </div>
-
-                        <h6 class="mt-4">Trusted Devices</h6>
-
-                        @if(auth()->user()->trusted_devices)
-                            <ul class="list-group mb-3">
-                                @foreach(auth()->user()->trusted_devices as $index => $device)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ $device }}
-                                        <form method="POST" action="{{ route('account.update-security') }}">
-                                        @csrf 
-                                        <button type ="submit" name="remove_device" value="{{ $index }}"
-                                                class="btn btn-sm btn-danger">Remove</button>
-                                        </form>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <p class="text-muted">No trusted devices.</p>
-                        @endif
-
-                        <button class="btn btn-primary w-100">Save Security Preferences</button>
-                    </form>
-                </div>
+        {{-- Security Success --}}
+        @if(session('security_success'))
+            <div class="alert alert-success mb-3">
+                {{ session('security_success') }}
             </div>
+        @endif
+
+        {{-- Security Validation Errors --}}
+        @if($errors->hasBag('security') && $errors->security->any())
+            <div class="alert alert-danger mb-3">
+                <ul class="mb-0">
+                    @foreach ($errors->security->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('account.update-security') }}">
+            @csrf
+
+            <div class="mb-3">
+                <label class="form-label">Session Timeout (minutes)</label>
+                <input 
+                    type="number" 
+                    name="session_timeout"
+                    value="{{ auth()->user()->session_timeout }}"
+                    class="form-control" 
+                    min="5" 
+                    max="120" 
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Recovery Email</label>
+                <input 
+                    type="email" 
+                    name="recovery_email"
+                    value="{{ auth()->user()->recovery_email }}"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Recovery Phone (10–12 digits)</label>
+                <input 
+                    type="text" 
+                    name="recovery_phone"
+                    value="{{ auth()->user()->recovery_phone }}"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-check mt-3">
+                <input 
+                    type="checkbox" 
+                    class="form-check-input" 
+                    id="security_notifications" 
+                    name="security_notifications"
+                    value="1"
+                    {{ old('security_notifications', $user->security_notifications) ? 'checked' : '' }}
+                >
+                <label class="form-check-label" for="security_notifications">
+                    Receive security notifications
+                </label>
+            </div>
+
+            <h6 class="mt-4">Trusted Devices</h6>
+
+            @php
+                $trustedDevices = is_array($user->trusted_devices) ? $user->trusted_devices : [];
+            @endphp
+
+            @if(count($trustedDevices) > 0)
+                <ul class="list-group mb-3">
+                    @foreach($trustedDevices as $index => $device)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $device }}
+                            
+                            <button 
+                                type="submit" 
+                                name="remove_device" 
+                                value="{{ $index }}" 
+                                class="btn btn-sm btn-danger"
+                            >
+                                Remove
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p class="text-muted">No trusted devices saved.</p>
+            @endif
+
+            <button class="btn btn-primary w-100 mt-3">Save Security Settings</button>
+        </form>
+
+    </div>
+</div>
 
             {{-- Danger Zone --}}
             <div class="card border-danger">

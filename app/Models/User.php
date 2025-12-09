@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     /**
      * Login History Relationship
-     * UC09 – A user can have many login history records
+     * UC03 – A user can have many login history records
      */
     public function loginHistories()
     {

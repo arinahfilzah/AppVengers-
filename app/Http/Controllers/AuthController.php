@@ -67,29 +67,64 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-    
+
         if (Auth::attempt($credentials, $request->remember)) {
 
+            $user = Auth::user();
+            $userAgent = $request->header('User-Agent');
+
+            // --- Convert User-Agent to friendly device name ---
+            $deviceName = $this->parseUserAgent($userAgent);
+
+            // --- Add to Trusted Devices if not already there ---
+            $trustedDevices = $user->trusted_devices ?? [];
+            if (!in_array($deviceName, $trustedDevices)) {
+                // Optional: Limit to last 5 devices
+                if (count($trustedDevices) >= 5) {
+                    array_shift($trustedDevices); // remove oldest device
+                }
+                $trustedDevices[] = $deviceName;
+                $user->trusted_devices = $trustedDevices;
+                $user->save();
+            }
+
+            // --- Save Login History ---
             LoginHistory::create([
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'ip_address' => $request->ip(),
-                'user_agent' => $request->header('User-Agent'),
-                'logged_in_at' => now (),
-                //'device' => $request->header('User-Agent'),
+                'user_agent' => $deviceName,  // save friendly name
+                'logged_in_at' => now(),
             ]);
 
-            // Save last login
-            Auth::user()->update([
+            // --- Save last login ---
+            $user->update([
                 'last_login' => now(),
             ]);
-    
+
             $request->session()->regenerate();
             return redirect('/dashboard');
-        }
-    
-        return back()->withErrors(['loginError' => 'Invalid email or password']);
-    }    
+        }   
 
+        return back()->withErrors(['loginError' => 'Invalid email or password']);
+    }
+
+    /**
+    * Parse User-Agent to get friendly device/browser name
+    */
+    protected function parseUserAgent($userAgent)
+    {
+        // Basic parsing for popular browsers/devices
+        if (preg_match('/iphone/i', $userAgent)) return 'iPhone';
+        if (preg_match('/ipad/i', $userAgent)) return 'iPad';
+        if (preg_match('/android/i', $userAgent)) return 'Android Device';
+        if (preg_match('/windows nt/i', $userAgent)) return 'Windows PC';
+        if (preg_match('/macintosh/i', $userAgent)) return 'Mac';
+        if (preg_match('/linux/i', $userAgent)) return 'Linux PC';
+
+        // Fallback to first 50 chars of full User-Agent
+        return substr($userAgent, 0, 50);
+    }
+   
     // UC02 - Logout
     public function logout(Request $request)
     {
@@ -275,26 +310,31 @@ class AuthController extends Controller
         }
     
         $user = Auth::user();
+        // Fetch current trusted devices
         $trustedDevices = $user->trusted_devices ?? [];
-    
+
         // Remove device
         if ($request->has('remove_device')) {
-            unset($trustedDevices[$request->remove_device]);
-            $user->trusted_devices = array_values($trustedDevices);
-            $user->save();
-    
+            $index = $request->remove_device;
+            if (isset($trustedDevices[$index])) {
+                unset($trustedDevices[$index]);
+                $trustedDevices = array_values($trustedDevices); // reindex array
+                $user->trusted_devices = $trustedDevices; // save as array, casting handles JSON
+                $user->save();
+
             return redirect()->route('account')
-                             ->with('security_success', 'Trusted device removed.')
-                             ->with('active_tab', 'settings');
+                            ->with('security_success', 'Trusted device removed.')
+                            ->with('active_tab', 'settings');
         }
-    
+    }
+
         // Update preferences
         $user->update([
             'session_timeout' => $request->session_timeout,
             'recovery_email' => $request->recovery_email,
             'recovery_phone' => $request->recovery_phone,
-            'security_notifications' => $request->has('security_notifications'), // TRUE/FALSE
-            'trusted_devices' => $trustedDevices,
+            'security_notifications' => $request->has('security_notifications'),
+            'trusted_devices' =>$trustedDevices,
         ]);
     
         return redirect()->route('account')
