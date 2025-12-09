@@ -171,6 +171,9 @@
         <li class="nav-item @if(Request::routeIs('course')) active @endif">
             <a href="{{ route('course') }}" class="nav-link">Courses</a>
         </li>
+        <li class="nav-item @if(Request::routeIs('resource.search')) active @endif">
+            <a href="{{ route('resource.search') }}" class="nav-link">Search Resources</a>
+        </li>
         <li class="nav-item @if(Request::routeIs('uploadResource')) active @endif">
             <a href="{{ route('uploadResource') }}" class="nav-link">Upload Resources</a>
         </li>

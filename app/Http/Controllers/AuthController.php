@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+USE App\Models\LoginHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -68,7 +69,15 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials, $request->remember)) {
-    
+
+            LoginHistory::create([
+                'user_id' => Auth::id(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->header('User-Agent'),
+                'logged_in_at' => now (),
+                //'device' => $request->header('User-Agent'),
+            ]);
+
             // Save last login
             Auth::user()->update([
                 'last_login' => now(),
@@ -149,36 +158,6 @@ class AuthController extends Controller
         return view('auth.reset-password', compact('token', 'email'));
     }
 
-    public function showUserProfile()
-    {
-        $user = Auth::user();
-        $lastLogin = $user->last_login ?? 'N/A';
-        return view('userProfile', compact('lastLogin'));
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'new_password' => [
-                'required',
-                'min:8',
-                'regex:/[a-z]/',
-                'regex:/[A-Z]/',
-                'regex:/[0-9]/',
-                'confirmed',   // must match new_password_confirmation
-            ],
-        ]);
-
-        $user = Auth::user();
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-    // Store active tab in session
-    return redirect()->route('account')
-                     ->with('password_success', 'Password updated successfully!')
-                     ->with('active_tab', 'settings');
-    }
-
     // Show Dashboard
     public function showDashboard()
     {
@@ -198,5 +177,149 @@ class AuthController extends Controller
                       ->withInput()
                       ->with('active_tab', 'settings')
         );
-    }    
+    }  
+
+    //Show User Profile (with login history) 
+    public function showUserProfile()
+    {
+        $user = Auth::user();
+
+        // Get login history
+        $loginHistory = LoginHistory::where('user_id', $user->id)
+                        ->orderBy('logged_in_at', 'desc')
+                        ->get();
+
+        return view('userProfile', compact('user', 'loginHistory'));
+    }
+    
+    // Update Profile
+    public function updateProfile(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'phone_number' => 'nullable|string|max:20',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('account')
+                            ->withErrors($validator, 'profile')
+                            ->withInput()
+                            ->with('active_tab', 'profile');
+        }
+
+        $user = Auth::user();
+
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/profile_pictures'), $filename);
+            $user->profile_picture = 'uploads/profile_pictures/' . $filename;
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone_number = $request->phone_number;
+        $user->save();
+
+        return redirect()->route('account')
+                        ->with('profile_success', 'Profile updated successfully!')
+                        ->with('active_tab', 'profile');
+    }
+
+    // Update Password
+    public function updatePassword(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+                'new_password' => [
+                'required',
+                'min:8',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'confirmed',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('account')
+                            ->withErrors($validator, 'password')
+                            ->withInput()
+                            ->with('active_tab', 'settings');
+        }
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('account')
+                        ->with('password_success', 'Password updated successfully!')
+                        ->with('active_tab', 'settings');
+    }
+
+    // Update Security Preferences
+    public function updateSecurityPreferences(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'session_timeout' => 'required|integer|min:5|max:120',
+            'recovery_email' => 'nullable|email',
+            'recovery_phone' => 'nullable|regex:/^[0-9]{10,12}$/',
+            'security_notifications' => 'nullable|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('account')
+                            ->withErrors($validator, 'security')
+                            ->with('active_tab', 'settings');
+        }
+
+        $user = Auth::user();
+        $trustedDevices = $user->trusted_devices ?? [];
+        
+        // Remove device if requested
+        if ($request->has('remove_device')) {
+            unset($trustedDevices[$request->remove_device]);
+            $user->trusted_devices = array_values($trustedDevices);
+            $user->save();
+        
+            return redirect()->route('account')
+                             ->with('security_success', 'Trusted device removed.')
+                             ->with('active_tab', 'settings');
+        }
+        
+        // Otherwise, update preferences
+        $user->update([
+            'session_timeout' => $request->session_timeout,
+            'recovery_email' => $request->recovery_email,
+            'recovery_phone' => $request->recovery_phone,
+            'security_notifications' => $request->has('security_notifications'),
+            'trusted_devices' => $trustedDevices,
+        ]);
+        
+        return redirect()->route('account')
+                         ->with('success', 'Security preferences updated!')
+                         ->with('active_tab', 'settings');        
+    }
+
+    //  Return JSON data for login history chart
+    public function loginHistoryData()
+    {
+        $user = Auth::user();
+
+        // Get login records for last 7 days
+        $loginRecords = $user->loginHistories()->get();
+
+        // Group by date
+        $data = [];
+        foreach ($loginRecords as $record) {
+            $date = \Carbon\Carbon::parse($record->logged_in_at)->format('Y-m-d');
+            if (!isset($data[$date])) {
+            $data[$date] = 0;
+            }
+            $data[$date]++;
+        }
+
+        return response()->json($data);
+    }
 }

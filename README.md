@@ -94,9 +94,9 @@
 
    <tr>
     <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;"></td>
+    <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <a href="resources/views/resource/search.blade.php"> Search Page </a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>

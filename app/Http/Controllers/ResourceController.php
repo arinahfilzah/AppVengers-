@@ -203,6 +203,53 @@ public function downloadResource($id)
     return response()->download($path);
 }
 
+public function search(Request $request)
+{
+    $query = Resource::query();
+
+    // Search by keyword
+    if ($request->has('search') && !empty($request->search)) {
+        $keyword = $request->search;
+        $query->where(function($q) use ($keyword) {
+            $q->where('title', 'like', "%{$keyword}%")
+              ->orWhere('subject', 'like', "%{$keyword}%")
+              ->orWhere('description', 'like', "%{$keyword}%");
+        });
+    }
+
+    // Filter by category
+    if ($request->has('category') && !empty($request->category)) {
+        $query->where('category', $request->category);
+    }
+
+    // Filter by year
+    if ($request->has('year') && !empty($request->year)) {
+        $query->where('year', $request->year);
+    }
+
+    // Filter by subject
+    if ($request->has('subject') && !empty($request->subject)) {
+        $query->where('subject', $request->subject);
+    }
+
+    // Sort
+    $sort = $request->get('sort', 'newest');
+    if ($sort === 'newest') {
+        $query->orderBy('upload_date', 'desc');
+    } else if ($sort === 'oldest') {
+        $query->orderBy('upload_date', 'asc');
+    }
+
+    $resources = $query->paginate(12);
+
+    // Get unique values for filter dropdowns
+    $categories = Resource::distinct()->pluck('category')->sort();
+    $years = Resource::distinct()->pluck('year')->sort();
+    $subjects = Resource::distinct()->pluck('subject')->sort();
+
+    return view('resource.search', compact('resources', 'categories', 'years', 'subjects'));
+}
+
 
     // Download QR code
     public function downloadQrCode($id)
