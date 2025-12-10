@@ -1,4 +1,4 @@
-## AppVengers Member
+## SPRINT 1 
 
 <h4>Project Manager : ARINAH FILZAH BINTI ROSLI </h4>
 <table style="border-collapse: collapse; width: 100%;">
@@ -136,6 +136,45 @@
     <ul>
       <li><a href="app/Models/Resource.php"> Resource Database</a></li>
     </ul>
+    </td>
+  </tr>
+</table>
+
+## SPRINT 2
+
+<h4>Tester : ARINAH FILZAH BINTI ROSLI </h4>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Profile & Account Settings Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/userProfile.blade.php">User Profile Page</a>
+            </li>
+        <ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Http/Controllers/AuthController.php">Auth Controller</a>
+            </li>
+        </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Models/User.php">User Database</a>
+            </li>
+        </ul>
     </td>
   </tr>
 </table>
