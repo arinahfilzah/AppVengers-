@@ -1,6 +1,6 @@
-## SPRINT 1 
+## APPVENGERS MEMBER
 
-<h4>Project Manager : ARINAH FILZAH BINTI ROSLI </h4>
+<h4>SUBSYSTEM 1 : ARINAH FILZAH BINTI ROSLI </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -53,61 +53,34 @@
         </ul>
     </td>
   </tr>
-</table>
-
-<h4>Developer : ABID HUMAYRAA BINTI HARDISURA </h4>
-<table style="border-collapse: collapse; width: 100%;">
-  <tr>
-    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
-    <th style="border: 1px solid #999; padding: 8px;">Module</th>
-    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
-    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
-    <th style="border: 1px solid #999; padding: 8px;">Database</th>
-  </tr>
-
    <tr>
-    <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;">Dashboard Overview and Statistics Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Profile Management & Account Settings Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <ul>
-      <li><a href="resources/views/admin/adminpage.blade.php"> Dashboard Overview Page </a></li>
-    </ul>
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/userProfile.blade.php">User Profile Page</a>
+            </li>
+        <ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Http/Controllers/AuthController.php">Auth Controller</a>
+            </li>
+        </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
-    </td>
-  </tr>
-</table>
-
-<h4>Tester : NUR AYUNI BINTI NOOR AZMAN  </h4>
-<table style="border-collapse: collapse; width: 100%;">
-  <tr>
-    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
-    <th style="border: 1px solid #999; padding: 8px;">Module</th>
-    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
-    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
-    <th style="border: 1px solid #999; padding: 8px;">Database</th>
-  </tr>
-
-   <tr>
-    <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
-    <td style="border: 1px solid #999; padding: 8px;">
-      <a href="resources/views/resource/search.blade.php"> Search Page </a>
-    </td>
-    <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
-    </td>
-    <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Models/User.php">User Database</a>
+            </li>
+        </ul>
     </td>
   </tr>
 </table>
 
-<h4>Scrum Master : AINNUR ASHIKIN BINTI ASDAR </h4>
+<h4>SUBSYSTEM 2 : AINNUR ASHIKIN BINTI ASDAR </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -140,9 +113,7 @@
   </tr>
 </table>
 
-## SPRINT 2
-
-<h4>Tester : ARINAH FILZAH BINTI ROSLI </h4>
+<h4>SUBSYSTEM 3 : NUR AYUNI BINTI NOOR AZMAN  </h4>
 <table style="border-collapse: collapse; width: 100%;">
   <tr>
     <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
@@ -153,28 +124,45 @@
   </tr>
 
    <tr>
-    <td style="border: 1px solid #999; padding: 8px;">2</td>
-    <td style="border: 1px solid #999; padding: 8px;">Profile & Account Settings Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <ul>
-            <li>
-                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/userProfile.blade.php">User Profile Page</a>
-            </li>
-        <ul>
+      <a href="resources/views/resource/search.blade.php"> Search Page </a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <ul>
-            <li>
-                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Http/Controllers/AuthController.php">Auth Controller</a>
-            </li>
-        </ul>
+      <a href=""></a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <ul>
-            <li>
-                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Models/User.php">User Database</a>
-            </li>
-        </ul>
+      <a href=""></a>
     </td>
+  </tr>
+</table>
+
+<h4>SUBSYSTEM 4 : ABID HUMAYRAA BINTI HARDISURA </h4>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="border: 1px solid #999; padding: 8px;">Sprint</th>
+    <th style="border: 1px solid #999; padding: 8px;">Module</th>
+    <th style="border: 1px solid #999; padding: 8px;">FrontEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">BackEnd</th>
+    <th style="border: 1px solid #999; padding: 8px;">Database</th>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;">Dashboard Overview and Statistics Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <ul>
+      <li><a href="resources/views/admin/adminpage.blade.php"> Dashboard Overview Page </a></li>
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+</table>
   </tr>
 </table>
