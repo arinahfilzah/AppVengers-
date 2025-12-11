@@ -8,7 +8,7 @@
     <div class="container"></div>
 </div>
 
-<section class="ftco-section ftco-no-pb ftco-no-pt">
+<section class="ftco-section ftco-no-pb ftco-no-pt" >
     <div class="container">
         <div class="row">
 

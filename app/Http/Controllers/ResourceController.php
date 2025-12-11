@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+
+
 
 class ResourceController extends Controller
 {
@@ -108,60 +114,43 @@ class ResourceController extends Controller
 
     // Generate QR Code for existing resource
 public function generateQrCode($id)
-{ 
-    try {
-        $resource = Resource::findOrFail($id);
-
-        if (!$resource->access_token) {
-            $resource->access_token = Str::random(32);
-            $resource->save();
-        }
-
-        // QR URL
-        $url = route('resource.view', ['token' => $resource->access_token]);
-
-        // Create QR
-        $qrPng = QrCode::format('png')
-                        ->size(400)
-                        ->margin(2)
-                        ->generate($url);
-        dd($qrPng);
-
-        // Make directory if not exists
-        if (!Storage::disk('public')->exists('qrcodes')) {
-            Storage::disk('public')->makeDirectory('qrcodes');
-        }
-
-        // File name + path
-        $fileName = 'qr_' . $resource->id . '_' . time() . '.png';
-        $path = 'qrcodes/' . $fileName;
-
-        if (!$qrPng) {dd("QR NOT GENERATED");
-}
-
-
-        // ✅ SAVE FILE CORRECTLY
-        Storage::disk('public')->put($path, $qrPng);
-        dd($result, $path);
-
-        // Save path to DB
-        $resource->qr_code_path = $path;
+{
+    $resource = Resource::findOrFail($id);
+    if (!$resource->access_token) {
+        $resource->access_token = Str::random(32);
         $resource->save();
-
-        return redirect()
-            ->route('manageResource')
-            ->with('success', 'QR code generated successfully.');
-
-    } catch (\Exception $e) {
-        return redirect()
-            ->route('manageResource')
-            ->with('error', 'QR code generation failed. Resource saved without QR.');
     }
+    $qrContent = url('/r/' . $resource->access_token);
+    
+    $qrCode = new QrCode(
+        data: $qrContent,
+        encoding: new Encoding('UTF-8'),
+        errorCorrectionLevel: ErrorCorrectionLevel::Low,
+        size: 300,
+        margin: 10,
+        roundBlockSizeMode: RoundBlockSizeMode::Margin,
+    );
+    
+    $writer = new PngWriter();
+    $result = $writer->write($qrCode);
+    
+    $path = 'qrcodes/qr_' . $resource->id . '.png';
+    Storage::disk('public')->put($path, $result->getString());
+    
+    $resource->update([
+        'qr_code_path' => $path
+    ]);
+    
+    return redirect()
+    ->route('manageResource')
+    ->with([
+        'qr_success' => 'QR code generated successfully for "' . $resource->title . '"!',
+        'qr_resource_id' => $resource->id
+    ]);
 }
 
 
-
-    // View resource by scanning QR code
+   
 public function viewByQrCode($token)
 {
     try {
@@ -188,7 +177,7 @@ public function viewByQrCode($token)
 }
 
 
-    // Download resource file
+    
 public function downloadResource($id)
 {
     $resource = Resource::findOrFail($id);
