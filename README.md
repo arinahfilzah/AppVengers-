@@ -165,7 +165,7 @@
   </tr>
 
  <tr>
-    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
     <td style="border: 1px solid #999; padding: 8px;">Content Moderation & User Management Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
