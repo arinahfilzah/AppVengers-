@@ -163,6 +163,23 @@
       <a href=""></a>
     </td>
   </tr>
+
+ <tr>
+    <td style="border: 1px solid #999; padding: 8px;">1</td>
+    <td style="border: 1px solid #999; padding: 8px;">Content Moderation & User Management Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <ul>
+      <li><a href=""> </a></li>
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+  
 </table>
   </tr>
 </table>
