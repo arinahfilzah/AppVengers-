@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Middleware\AdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,17 +91,46 @@ Route::middleware('auth')->group(function () {
 */
 Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('resource.view');
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/adminpage', [AdminController::class, 'index'])->name('adminpage');
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/contributors', [AdminController::class, 'contributors'])->name('contributors');
-    Route::get('/admin/activity', [AdminController::class, 'activity'])->name('activity');
-    Route::get('/admin/analytics', [AdminController::class, 'analytics'])->name('analytics');
-    Route::get('/admin/reports', [AdminController::class, 'reports'])->name('reports');
-    Route::get('/admin/settings', [AdminController::class, 'settings'])->name('settings');
+
+// ===========================================
+// ADMIN ROUTES
+// ===========================================
+// Replace the previous admin routes with these:
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Admin Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])
+        ->name('dashboard');
+    
+    // Contributor Activities
+    Route::get('/contributors', [App\Http\Controllers\AdminController::class, 'contributorActivities'])
+        ->name('contributor-activities');
+    
+    // AJAX endpoints
+    Route::get('/stats/dashboard', [App\Http\Controllers\AdminController::class, 'getDashboardStats'])
+        ->name('stats.dashboard');
+    
+    Route::get('/stats/contributors', [App\Http\Controllers\AdminController::class, 'getContributors'])
+        ->name('stats.contributors');
+
+    // Verification Routes
+    Route::get('/verification', function () {
+        return view('admin.verification');
+    })->name('verification');
+    
+    Route::post('/verification/{id}/approve', [AdminController::class, 'approveVerification']);
+    Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification']);
+    Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification']);
+    
+    // Review Routes
+    Route::get('/reviews', function () {
+        return view('admin.reviews');
+    })->name('reviews');
+    
+    Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
+    Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
 });
+    
+    // TODO: Add middleware when auth is ready
+    // ->middleware(['auth', 'admin']);
+?>
