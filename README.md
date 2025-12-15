@@ -169,7 +169,8 @@
     <td style="border: 1px solid #999; padding: 8px;">Content Moderation & User Management Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-      <li><a href=""> </a></li>
+      <li><a href="resources/views/admin/verification.blade.php"> </a>Verify Contributors Page</li>
+      <li><a href="resources/views/admin/reviews.blade.php"> </a>Review Content Page</li>
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
