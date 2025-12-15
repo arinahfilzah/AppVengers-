@@ -153,7 +153,8 @@
     <td style="border: 1px solid #999; padding: 8px;">Dashboard Overview and Statistics Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-      <li><a href="resources/views/admin/adminpage.blade.php"> Dashboard Overview Page </a></li>
+      <li><a href=resources/views/admin/admindashboard.blade.php> Dashboard Overview Page </a></li>
+        <li><a href=resources/views/admin/contributor-activities.blade.php> Contributor Activities Page </a></li>
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
