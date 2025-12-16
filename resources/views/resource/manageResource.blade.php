@@ -18,29 +18,50 @@
     <div class="container">
 
         {{-- SUCCESS MESSAGE --}}
-        @if(session('success'))
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: "{{ session('success') }}",
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            </script>
-        @endif
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "{{ session('success') }}",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
 
-        @if(session('error'))
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: "{{ session('error') }}",
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            </script>
-        @endif
+{{-- QR CODE GENERATION SUCCESS --}}
+@if(session('qr_success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'QR Code Generated!',
+            html: `
+                <div style="padding: 20px;">
+                    <i class="fa fa-qrcode" style="font-size: 60px; color: #4986fc; margin-bottom: 15px;"></i>
+                    <p style="font-size: 16px; margin-top: 10px;">{{ session('qr_success') }}</p>
+                    <p style="color: #666; font-size: 14px;">You can now download or share the QR code with students.</p>
+                </div>
+            `,
+            confirmButtonText: 'Great!',
+            confirmButtonColor: '#4986fc',
+            timer: 4000,
+            timerProgressBar: true
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ session('error') }}",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
 
         {{-- NO RESOURCE POPUP --}}
         @if($resources->isEmpty())
@@ -138,34 +159,7 @@
     </div>
 </div>
 
-{{-- QR CODE GENERATION SUCCESS WITH PREVIEW --}}
-@if(session('qr_success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'QR Code Generated!',
-            html: `
-                <div style="padding: 20px;">
-                    <i class="fa fa-qrcode" style="font-size: 60px; color: #4986fc; margin-bottom: 15px;"></i>
-                    <p style="font-size: 16px; margin-top: 10px; font-weight: 600;">{{ session('qr_success') }}</p>
-                    <p style="color: #666; font-size: 14px; margin: 15px 0;">You can now download or share the QR code with students.</p>
-                    <div style="margin-top: 20px;">
-                        <button onclick="scrollToQR()" class="btn btn-primary btn-sm">
-                            <i class="fa fa-eye"></i> View QR Code
-                        </button>
-                    </div>
-                </div>
-            `,
-            confirmButtonText: 'Got it!',
-            confirmButtonColor: '#4986fc',
-            timer: 5000,
-            timerProgressBar: true,
-            showClass: {
-                popup: 'animate__animated animate__bounceIn'
-            }
-        });
-    </script>
-@endif
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
