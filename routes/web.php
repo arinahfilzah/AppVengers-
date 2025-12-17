@@ -130,7 +130,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
     Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
 });
-    
-    // TODO: Add middleware when auth is ready
-    // ->middleware(['auth', 'admin']);
-?>
+

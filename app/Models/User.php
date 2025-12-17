@@ -62,4 +62,49 @@ class User extends Authenticatable
     {
         return $this->hasMany(LoginHistory::class);
     }
+
+    public function isPremium()
+    {
+        return $this->account_type === 'premium' 
+            && $this->premium_expires_at 
+            && $this->premium_expires_at->isFuture();
+    }
+
+    // Check if user is basic
+    public function isBasic()
+    {
+        return $this->account_type === 'basic';
+    }
+
+    // Upgrade user to premium
+    public function upgradeToPremium($days = 30)
+    {
+        $this->account_type = 'premium';
+        $this->premium_expires_at = now()->addDays($days);
+        $this->save();
+    }
+
+    // Downgrade user to basic
+    public function downgradeToBasic()
+    {
+        $this->account_type = 'basic';
+        $this->premium_expires_at = null;
+        $this->save();
+    }
+
+    // Get days remaining for premium
+    public function getPremiumDaysRemaining()
+    {
+        if (!$this->premium_expires_at) {
+            return 0;
+        }
+        return now()->diffInDays($this->premium_expires_at, false);
+    }
+
+    // Relationship with mock payments
+    public function mockPayments()
+    {
+        return $this->hasMany(MockPayment::class);
+    }
+
 }
