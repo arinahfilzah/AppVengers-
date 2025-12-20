@@ -10,23 +10,17 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-
-        \Log::info('=== ADMIN MIDDLEWARE HIT ===');
-    \Log::info('URL: ' . $request->fullUrl());
-    \Log::info('User ID: ' . (Auth::id() ?? 'null'));
-    
-    if (Auth::check()) {
-        \Log::info('User role: ' . Auth::user()->role);
-        \Log::info('User data: ' . json_encode(Auth::user()->toArray()));
-    }
         // Check if user is authenticated
         if (!Auth::check()) {
-            return redirect('/login');
+            return redirect('/login')->with('error', 'You need to log in to access this page.');
         }
-        
-        // Check if user has admin role (using 'role' column, not 'is_admin')
-        if (Auth::user()->role === 'admin') {
-            return $next($request);
+
+        // Check if user has admin role
+        if (Auth::user()->role !== 'admin') {
+            return redirect('/')->with('error', 'You do not have the necessary permissions to access this page.');
         }
+
+        // Allow access if the user is an admin
+        return $next($request);
     }
 }

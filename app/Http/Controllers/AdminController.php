@@ -38,7 +38,7 @@ class AdminController extends Controller
             ]
         ];
         
-        return view('admin.admindashboard', compact('stats'));
+        return view('admin.dashboard', compact('stats'));
     }
     
     /**
@@ -157,4 +157,60 @@ class AdminController extends Controller
             'total' => count($contributors)
         ]);
     }
+
+    // Display all users
+    public function viewUsers()
+    {
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
+    }
+
+    // Edit a specific user's role/status
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
+    }
+
+    // Update user role/status
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validate input
+        $request->validate([
+            'role' => 'required|in:admin,user',
+            'account_status' => 'required|in:active,suspended',
+        ]);
+
+        $user->role = $request->input('role');
+        $user->account_status = $request->input('account_status');
+
+        // Save changes
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User updated successfully');
+    }
+
+    // Suspend a user account
+    public function suspendUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->account_status = 'suspended';
+        $user->suspended_reason = request('reason');
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User suspended successfully');
+    }
+
+    // Reactivate a user account
+    public function reactivateUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->account_status = 'active';
+        $user->suspended_reason = null;
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User reactivated successfully');
+    }    
 }

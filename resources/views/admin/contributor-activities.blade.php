@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('page-title', 'Contributor Management')
 @section('page-subtitle', 'Monitor and manage verified contributors and their activities')

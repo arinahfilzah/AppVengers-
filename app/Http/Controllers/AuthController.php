@@ -194,15 +194,22 @@ class AuthController extends Controller
     }
 
     // Show Dashboard
-    public function showDashboard()
-    {
-        $user = Auth::user();
+public function showDashboard()
+{
+    $user = Auth::user();
 
-        return view('dashboard', [
-            'user' => $user,
-            'lastLogin' => $user->last_login ?? 'N/A',
-        ]);
+    // Check if the user is an admin
+    if ($user->role === 'admin') {
+        // Redirect to the admin dashboard
+        return redirect()->route('admin.dashboard');
     }
+
+    // Otherwise, return the normal user's dashboard
+    return view('dashboard', [
+        'user' => $user,
+        'lastLogin' => $user->last_login ?? 'N/A',
+    ]);
+}
     
     protected function failedValidation(Validator $validator)
     {
