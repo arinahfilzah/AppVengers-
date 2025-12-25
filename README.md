@@ -78,6 +78,43 @@
         </ul>
     </td>
   </tr>
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">3</td>
+    <td style="border: 1px solid #999; padding: 8px;">User Acccess Control & Authorization Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/admin/users/index.blade.php">User Management Page for Admin</a>
+            </li>
+             <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/admin/users/edit.blade.php">User Management Edit Page for Admin</a>
+            </li>
+             <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/admin/users/show.blade.php">User Management Profile Details Page for Admin</a>
+            </li>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/resources/views/errors/403.blade.php">Error Access Page</a>
+            </li>
+        <ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Http/Controllers/AuthController.php">Auth Controller</a>
+            </li>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Http/Controllers/AdminController.php">Admin Controller</a>
+            </li>
+        </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+            <li>
+                <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Models/User.php">User Database</a>
+            </li>
+        </ul>
+    </td>
+  </tr>
 </table>
 
 <h4>SUBSYSTEM 2 : AINNUR ASHIKIN BINTI ASDAR </h4>
