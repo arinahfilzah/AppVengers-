@@ -6,7 +6,7 @@
 @section('content')
 
 <!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-5">
+<div class="container py-4" style="max-width: 1200px; min-height: calc(100vh - 80px);">
     <div>
         <h1 class="h2 mb-1" style="color: #0d3b66;">
             <i class="fa fa-users me-2"></i>Contributor Activities
@@ -18,7 +18,6 @@
             <i class="fa fa-user-plus me-1"></i>Add Contributor
         </button>
     </div>
-</div>
 
 <!-- Filters & Search Bar -->
 <div class="admin-card card border-0 mb-4">
@@ -535,6 +534,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 

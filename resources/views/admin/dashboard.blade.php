@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="container-fluid px-4">
+<div class="container py-4" style="max-width: 1200px; min-height: calc(100vh - 80px);">
 
     <!-- Page Header -->
     <div class="row mb-4">

@@ -30,6 +30,8 @@ class User extends Authenticatable
         'security_notifications',
         'profile_picture',
         'phone_number',
+        'account_status',
+        'suspended_reason',
     ];    
 
     /**

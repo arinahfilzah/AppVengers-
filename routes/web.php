@@ -92,9 +92,12 @@ Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('res
 | Admin Routes (Protected by Admin Middleware)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    // Admin Dashboard
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'admin']) // ✅ add auth too
+    ->group(function () {
+
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // Contributor Activities
     Route::get('/contributors', [AdminController::class, 'contributorActivities'])->name('contributor-activities');
@@ -115,11 +118,17 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     })->name('reviews');
     Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
     Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
-    
-    // User Management
-    Route::get('/users', [AdminController::class, 'viewUsers'])->name('viewUsers');
-    Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('editUser');
-    Route::put('/users/{id}/update', [AdminController::class, 'updateUser'])->name('updateUser');
-    Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
-    Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
-});
+
+        // User Management
+        Route::get('/users', [AdminController::class, 'viewUsers'])->name('viewUsers');
+
+        // ✅ NEW: View user details (UC01 Step 3)
+        Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('showUser');
+
+        Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('editUser');
+        Route::put('/users/{id}/update', [AdminController::class, 'updateUser'])->name('updateUser');
+
+        // ✅ Suspend requires reason now
+        Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
+        Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
+    });

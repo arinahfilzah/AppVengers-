@@ -10,17 +10,28 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Check if user is authenticated
         if (!Auth::check()) {
             return redirect('/login')->with('error', 'You need to log in to access this page.');
         }
 
-        // Check if user has admin role
-        if (Auth::user()->role !== 'admin') {
-            return redirect('/')->with('error', 'You do not have the necessary permissions to access this page.');
+        $user = Auth::user();
+
+        // ✅ Block suspended even if role is admin
+        if ($user->account_status === 'suspended') {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('/login')->withErrors([
+                'loginError' => 'Your account has been suspended. Please contact admin.'
+            ]);
         }
 
-        // Allow access if the user is an admin
+        // Logged in but not admin
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Access denied. Admin privileges required.');
+        }
+
         return $next($request);
     }
 }
