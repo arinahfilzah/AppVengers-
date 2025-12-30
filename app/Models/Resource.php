@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ResourceVersion;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class Resource extends Model
 {
@@ -13,6 +16,7 @@ class Resource extends Model
         'year',
         'subject',
         'file_path',
+        'current_version',
         'qr_code_path',
         'access_token',
         'upload_date',
@@ -27,5 +31,23 @@ class Resource extends Model
     public function uploader()
     {
         return $this->belongsTo(User::class, 'uploader_id');
+    }
+
+    // Relationship with versions
+    public function versions()
+    {
+        return $this->hasMany(ResourceVersion::class)->orderBy('version_number', 'desc');
+    }
+
+    // Get latest version
+    public function latestVersion()
+    {
+        return $this->hasOne(ResourceVersion::class)->latestOfMany('version_number');
+    }
+
+
+    public function collaborators()
+    {
+        return $this->belongsToMany(User::class, 'resource_user');
     }
 }

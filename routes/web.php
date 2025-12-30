@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 | Landing Page
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', function () {
     return view('home');
 })->name('home');
@@ -60,9 +61,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/resource/{id}/edit', [ResourceController::class, 'edit'])->name('resource.edit');
     Route::put('/resource/{id}', [ResourceController::class, 'update'])->name('resource.update');
     Route::delete('/resource/{id}', [ResourceController::class, 'destroy'])->name('resource.destroy');
+
+    // QR Code Routes
     Route::get('/resource/{id}/generate-qr', [ResourceController::class, 'generateQrCode'])->name('resource.generateQr');
     Route::get('/resource/{id}/download-qr', [ResourceController::class, 'downloadQrCode'])->name('resource.downloadQr');
+
+    // Version Control Routes
+    Route::get('/resource/{id}/versions', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
+    Route::get('/resource/{resourceId}/version/{versionNumber}/download', [ResourceController::class, 'downloadVersion'])->name('resource.downloadVersion');
+    Route::post('/resource/{resourceId}/version/{versionNumber}/restore', [ResourceController::class, 'restoreVersion'])->name('resource.restoreVersion');
+
     Route::get('/resource/{id}/download', [ResourceController::class, 'downloadResource'])->name('resource.download');
+
+    // Show update version form
+    Route::get('/resource/{id}/update-version',[ResourceController::class, 'showUpdateVersionForm'])->name('resource.updateVersionForm');
+
+    // Save new version
+    Route::post('/resource/{id}/update-version',[ResourceController::class, 'storeNewVersion'])->name('resource.storeNewVersion');
+
+    // view resource history
+    Route::get('/resource/{id}/history', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -94,41 +113,36 @@ Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('res
 */
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'admin']) // ✅ add auth too
+    ->middleware(['auth', 'admin'])
     ->group(function () {
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Contributor Activities
-    Route::get('/contributors', [AdminController::class, 'contributorActivities'])->name('contributor-activities');
-    Route::get('/stats/dashboard', [AdminController::class, 'getDashboardStats'])->name('stats.dashboard');
-    Route::get('/stats/contributors', [AdminController::class, 'getContributors'])->name('stats.contributors');
+        // Contributor Activities
+        Route::get('/contributors', [AdminController::class, 'contributorActivities'])->name('contributor-activities');
+        Route::get('/stats/dashboard', [AdminController::class, 'getDashboardStats'])->name('stats.dashboard');
+        Route::get('/stats/contributors', [AdminController::class, 'getContributors'])->name('stats.contributors');
 
-    // Verification Routes
-    Route::get('/verification', function () {
-        return view('admin.verification');
-    })->name('verification');
-    Route::post('/verification/{id}/approve', [AdminController::class, 'approveVerification']);
-    Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification']);
-    Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification']);
+        // Verification Routes
+        Route::get('/verification', function () {
+            return view('admin.verification');
+        })->name('verification');
+        Route::post('/verification/{id}/approve', [AdminController::class, 'approveVerification']);
+        Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification']);
+        Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification']);
 
-    // Review Routes
-    Route::get('/reviews', function () {
-        return view('admin.reviews');
-    })->name('reviews');
-    Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
-    Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
+        // Review Routes
+        Route::get('/reviews', function () {
+            return view('admin.reviews');
+        })->name('reviews');
+        Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
+        Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
 
         // User Management
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('viewUsers');
-
-        // ✅ NEW: View user details (UC01 Step 3)
         Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('showUser');
-
         Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('editUser');
         Route::put('/users/{id}/update', [AdminController::class, 'updateUser'])->name('updateUser');
-
-        // ✅ Suspend requires reason now
         Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
         Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
     });

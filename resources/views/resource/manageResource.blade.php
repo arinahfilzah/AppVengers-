@@ -18,120 +18,169 @@
     <div class="container">
 
         {{-- SUCCESS MESSAGE --}}
-@if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: "{{ session('success') }}",
-            timer: 2000,
-            showConfirmButton: false
-        });
-    </script>
-@endif
+        @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+        @endif
 
-{{-- QR CODE GENERATION SUCCESS --}}
-@if(session('qr_success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'QR Code Generated!',
-            html: `
-                <div style="padding: 20px;">
-                    <i class="fa fa-qrcode" style="font-size: 60px; color: #4986fc; margin-bottom: 15px;"></i>
-                    <p style="font-size: 16px; margin-top: 10px;">{{ session('qr_success') }}</p>
-                    <p style="color: #666; font-size: 14px;">You can now download or share the QR code with students.</p>
-                </div>
-            `,
-            confirmButtonText: 'Great!',
-            confirmButtonColor: '#4986fc',
-            timer: 4000,
-            timerProgressBar: true
-        });
-    </script>
-@endif
+        {{-- VERSION UPDATE SUCCESS --}}
+        @if(session('version_success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Version Updated!',
+                html: `
+                        <div style="padding: 20px;">
+                            <i class="fa fa-code-branch" style="font-size: 60px; color: #28a745; margin-bottom: 15px;"></i>
+                            <p style="font-size: 16px; margin-top: 10px; font-weight: 600;">{{ session('version_success') }}</p>
+                            <p style="color: #666; font-size: 14px;">All previous versions are still accessible in version history.</p>
+                        </div>
+                    `,
+                confirmButtonText: 'Great!',
+                confirmButtonColor: '#28a745',
+                timer: 4000,
+                timerProgressBar: true
+            });
+        </script>
+        @endif
 
-@if(session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: "{{ session('error') }}",
-            timer: 3000,
-            showConfirmButton: false
-        });
-    </script>
-@endif
+        {{-- QR CODE GENERATION SUCCESS --}}
+        @if(session('qr_success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'QR Code Generated!',
+                html: `
+                        <div style="padding: 20px;">
+                            <i class="fa fa-qrcode" style="font-size: 60px; color: #4986fc; margin-bottom: 15px;"></i>
+                            <p style="font-size: 16px; margin-top: 10px;">{{ session('qr_success') }}</p>
+                            <p style="color: #666; font-size: 14px;">You can now download or share the QR code with students.</p>
+                        </div>
+                    `,
+                confirmButtonText: 'Great!',
+                confirmButtonColor: '#4986fc',
+                timer: 4000,
+                timerProgressBar: true
+            });
+        </script>
+        @endif
+
+        @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+        @endif
 
         {{-- NO RESOURCE POPUP --}}
         @if($resources->isEmpty())
-            <script>
-                Swal.fire({
-                    icon: 'info',
-                    title: 'No Resources Found',
-                    text: 'You have not uploaded any resources yet.'
-                });
-            </script>
+        <script>
+            Swal.fire({
+                icon: 'info',
+                title: 'No Resources Found',
+                text: 'You have not uploaded any resources yet.'
+            });
+        </script>
 
-            <div class="text-center mt-5">
-                <a href="{{ route('uploadResource') }}" class="btn btn-primary">
-                    Upload Your First Resource
-                </a>
-            </div>
+        <div class="text-center mt-5">
+            <a href="{{ route('uploadResource') }}" class="btn btn-primary">
+                Upload Your First Resource
+            </a>
+        </div>
         @else
-            <div class="row">
-                @foreach($resources as $resource)
-                <div class="col-md-4 mb-4 ftco-animate">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
+        <div class="row">
+            @foreach($resources as $resource)
+            <div class="col-md-4 mb-4 ftco-animate">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        {{-- Version Badge --}}
+                        <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title">{{ $resource->title }}</h5>
-                            <p class="card-text">{{ $resource->description }}</p>
-                            <p class="card-text"><strong>Category:</strong> {{ $resource->category }}</p>
-                            <p class="card-text"><strong>Year:</strong> {{ $resource->year }}</p>
-                            <p class="card-text"><strong>Subject:</strong> {{ $resource->subject }}</p>
+                            <span class="badge bg-primary" style="font-size: 12px;">
+                                v{{ $resource->current_version }}
+                            </span>
+                        </div>
 
-                            {{-- QR Code Section --}}
-                            <div class="qr-section mt-3 p-3" style="background: #f9faff; border-radius: 8px;">
-                                @if($resource->qr_code_path)
-                                    <div class="text-center">
-                                        <p class="mb-2"><strong>QR Code:</strong></p>
-                                        <img src="{{ asset('storage/' . $resource->qr_code_path) }}" 
-                                             alt="QR Code" 
-                                             class="img-fluid mb-2" 
-                                             style="max-width: 150px; border: 2px solid #4986fc; border-radius: 8px; cursor: pointer;"
-                                             onclick="showQrModal('{{ asset('storage/' . $resource->qr_code_path) }}', '{{ $resource->title }}')">
-                                        <br>
-                                        <small class="text-muted">Scan to access resource</small>
-                                        <div class="mt-2">
-                                            <a href="{{ route('resource.downloadQr', $resource->id) }}" class="btn btn-sm btn-success">
-                                                <i class="fa fa-download"></i> Download QR
-                                            </a>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="text-center">
-                                        <p class="text-muted mb-2">No QR code yet</p>
-                                        <a href="{{ route('resource.generateQr', $resource->id) }}" class="btn btn-sm btn-info">
-                                            <i class="fa fa-qrcode"></i> Generate QR Code
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
+                        <p class="card-text">{{ $resource->description }}</p>
+                        <p class="card-text"><strong>Category:</strong> {{ $resource->category }}</p>
+                        <p class="card-text"><strong>Year:</strong> {{ $resource->year }}</p>
+                        <p class="card-text"><strong>Subject:</strong> {{ $resource->subject }}</p>
 
-                            {{-- Action Buttons --}}
-                            <div class="mt-3">
-                                <a href="{{ asset('storage/uploads/' . $resource->file_path) }}" target="_blank" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-eye"></i> View File
-                                </a>
-                                <a href="{{ route('resource.edit', $resource->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-edit"></i> Edit
+                        {{-- Version Info --}}
+                        @if($resource->versions->count() > 1)
+                        <div class="alert alert-info p-2 mb-3" style="font-size: 13px;">
+                            <i class="fa fa-history"></i>
+                            <strong>{{ $resource->versions->count() }} versions</strong> available
+                            <a href="{{ route('resource.versionHistory', $resource->id) }}" class="text-decoration-none">
+                                View History →
+                            </a>
+                        </div>
+                        @endif
+
+                        {{-- QR Code Section --}}
+                        <div class="qr-section mt-3 p-3" style="background: #f9faff; border-radius: 8px;">
+                            @if($resource->qr_code_path)
+                            <div class="text-center">
+                                <p class="mb-2"><strong>QR Code:</strong></p>
+                                <img src="{{ asset('storage/' . $resource->qr_code_path) }}"
+                                    alt="QR Code"
+                                    class="img-fluid mb-2"
+                                    style="max-width: 150px; border: 2px solid #4986fc; border-radius: 8px; cursor: pointer;"
+                                    onclick="showQrModal('{{ asset('storage/' . $resource->qr_code_path) }}', '{{ addslashes($resource->title) }}')">
+                                <br>
+                                <small class="text-muted">Scan to access resource</small>
+                                <div class="mt-2">
+                                    <a href="{{ route('resource.downloadQr', $resource->id) }}" class="btn btn-sm btn-success">
+                                        <i class="fa fa-download"></i> Download QR
+                                    </a>
+                                </div>
+                            </div>
+                            @else
+                            <div class="text-center">
+                                <p class="text-muted mb-2">No QR code yet</p>
+                                <a href="{{ route('resource.generateQr', $resource->id) }}" class="btn btn-sm btn-info">
+                                    <i class="fa fa-qrcode"></i> Generate QR Code
                                 </a>
                             </div>
+                            @endif
+                        </div>
+
+                        {{-- Action Buttons --}}
+                        <div class="mt-3">
+                            <a href="{{ asset('storage/uploads/' . $resource->file_path) }}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fa fa-eye"></i> View File
+                            </a>
+
+                            <a href="{{ route('resource.edit', $resource->id) }}"
+                                class="btn btn-sm btn-warning">
+                                 Edit
+                            </a>
+                            <a href="{{ route('resource.updateVersionForm', $resource->id) }}" class="btn btn-warning btn-sm">
+                                <i class="fa fa-edit"></i> Update
+                            </a>
+                            @if($resource->versions->count() > 0)
+                            <a href="{{ route('resource.versionHistory', $resource->id) }}" class="btn btn-info btn-sm">
+                                <i class="fa fa-history"></i> Versions
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>
-                @endforeach
             </div>
+            @endforeach
+        </div>
         @endif
 
     </div>
@@ -159,18 +208,16 @@
     </div>
 </div>
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function showQrModal(qrUrl, title) {
-    document.getElementById('qrModalImage').src = qrUrl;
-    document.getElementById('qrResourceTitle').textContent = title;
-    const modal = new bootstrap.Modal(document.getElementById('qrModal'));
-    modal.show();
-}
+    function showQrModal(qrUrl, title) {
+        document.getElementById('qrModalImage').src = qrUrl;
+        document.getElementById('qrResourceTitle').textContent = title;
+        const modal = new bootstrap.Modal(document.getElementById('qrModal'));
+        modal.show();
+    }
 </script>
 
 <script src="{{ asset('js/main.js') }}"></script>
