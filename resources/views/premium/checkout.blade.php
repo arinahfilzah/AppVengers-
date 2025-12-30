@@ -52,7 +52,7 @@
 
                         <!-- Payment Form -->
                         <div class="col-md-7">
-                            <form method="POST" action="{{ route('payment.process') }}" id="paymentForm">
+                            <form method="POST" action="{{ route('premium.process') }}" id="paymentForm">
                                 @csrf
                                 
                                 <div class="mb-3">

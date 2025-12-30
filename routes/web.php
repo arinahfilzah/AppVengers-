@@ -1,9 +1,15 @@
 <?php
+// DEBUG: Test if file loads
+Route::get('/debug-test', function() {
+    return "Routes file is loading!";
+});
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PremiumController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 
 /*
@@ -82,6 +88,19 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------x------------------------------
     */
     Route::get('/search', [ResourceController::class, 'search'])->name('resource.search');
+
+    // Premium routes
+    Route::get('/premium', [PremiumController::class, 'plans'])->name('premium.plans');
+    Route::get('/premium/checkout/{plan}', [PremiumController::class, 'checkout'])->name('premium.checkout');
+    Route::get('/premium/success', [PremiumController::class, 'success'])->name('premium.success');
+
+    // Payment processing
+    Route::post('/premium/process', [PaymentController::class, 'process'])->name('premium.process');
+
+    // Test route (legacy)
+    Route::get('/premium-test', function() {
+        return view('premium.test-page');
+    });
 });
 
 /*

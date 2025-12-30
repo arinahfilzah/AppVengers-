@@ -27,7 +27,7 @@ class PremiumPlanSeeder extends Seeder
             'price' => 299.00,
             'duration_days' => 30,
             'is_active' => true,
-            'features' => json_encode([
+            'features' => [
                 'Unlimited AI Resource Recommendations',
                 'Advanced Search Filters',
                 'Ad-Free Experience',
@@ -35,7 +35,7 @@ class PremiumPlanSeeder extends Seeder
                 'Early Access to New Features',
                 'Download Study Materials',
                 'Collaboration Tools Access'
-            ]),
+            ],
             'sort_order' => 1,
         ]);
 
@@ -47,12 +47,12 @@ class PremiumPlanSeeder extends Seeder
             'price' => 2990.00,
             'duration_days' => 365,
             'is_active' => false, // Not active for Sprint 2
-            'features' => json_encode([
+            'features' => [
                 'Everything in Monthly Plan',
                 'Save 20% compared to monthly',
                 'Priority Feature Requests',
                 'Dedicated Support Channel'
-            ]),
+            ],
             'sort_order' => 2,
         ]);
 

@@ -40,12 +40,14 @@ class PremiumController extends Controller
         $plan = $this->premiumService->getPlan($planId);
 
         // Store plan in session for payment processing
-        session(['selected_plan' => $plan]);
+        if (!$plan) {
+            return redirect()->route('premium.plans')
+                ->with('error', 'Selected plan does not exist.');
+        }
 
-        return view('premium.checkout', [
-            'plan' => $plan,
-            'user' => $user,
-        ]);
+        session(['selected_plan_id' => $plan->id]);
+
+        return view('premium.checkout', compact('plan', 'user'));
     }
 
     // Show payment success page

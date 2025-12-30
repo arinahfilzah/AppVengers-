@@ -29,12 +29,30 @@
                                     <p class="text-muted">per {{ $plan->duration_days }} days</p>
                                     
                                     <ul class="list-unstyled">
-                                        @foreach($plan->features as $feature)
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            {{ $feature }}
-                                        </li>
-                                        @endforeach
+                                        @php
+                                            // Ensure features is an array. Handles cases where it's stored as JSON string or comma-separated string.
+                                            $features = [];
+                                            if (is_array($plan->features)) {
+                                                $features = $plan->features;
+                                            } elseif (is_string($plan->features)) {
+                                                $decoded = json_decode($plan->features, true);
+                                                if (is_array($decoded)) {
+                                                    $features = $decoded;
+                                                } else {
+                                                    // Fallback: comma-separated list
+                                                    $features = array_filter(array_map('trim', explode(',', $plan->features)));
+                                                }
+                                            }
+                                        @endphp
+
+                                        @forelse($features as $feature)
+                                            <li class="mb-2">
+                                                <i class="fas fa-check text-success me-2"></i>
+                                                {{ $feature }}
+                                            </li>
+                                        @empty
+                                            <li class="text-muted"><small>No features listed.</small></li>
+                                        @endforelse
                                     </ul>
                                 </div>
                                 <div class="card-footer">

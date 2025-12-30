@@ -24,11 +24,14 @@ class PaymentController extends Controller
         $user = Auth::user();
         
         // Get selected plan from session
-        $plan = session('selected_plan');
-        if (!$plan) {
+        $planId = session('selected_plan_id');
+        if (!$planId) {
             return redirect()->route('premium.plans')
                 ->with('error', 'Please select a plan first.');
         }
+
+        // Load selected plan
+        $plan = $this->premiumService->getPlan($planId);
 
         // Validate payment data
         $validationErrors = $this->paymentService->validatePaymentData($request->all());
@@ -44,7 +47,7 @@ class PaymentController extends Controller
         );
 
         // Clear session
-        session()->forget('selected_plan');
+        session()->forget('selected_plan_id');
 
         // Redirect based on result
         if ($payment->status === 'success') {

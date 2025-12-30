@@ -23,18 +23,14 @@ class PremiumService
     public function canPurchasePremium(User $user)
     {
         // User must be basic or premium expired
-        return $user->account_type === 'basic' || 
-               ($user->account_type === 'premium' && 
-                (!$user->premium_expires_at || $user->premium_expires_at < now()));
+        return $user->isBasic() || !$user->isPremium();
     }
 
     // Get user's premium status info
     public function getUserPremiumInfo(User $user)
     {
         return [
-            'is_premium' => $user->account_type === 'premium' && 
-                           $user->premium_expires_at && 
-                           $user->premium_expires_at > now(),
+            'is_premium' => $user->isPremium(),
             'account_type' => $user->account_type,
             'expires_at' => $user->premium_expires_at,
             'can_upgrade' => $this->canPurchasePremium($user),

@@ -205,6 +205,23 @@
                     <a href="{{ route('manageResource') }}" class="nav-link">Manage</a>
                 </li>
 
+                <!-- Premium Badge/Button -->
+<li class="nav-item">
+    @auth
+        @if(Auth::user()->account_type === 'premium' && Auth::user()->premium_expires_at > now())
+            <!-- Premium User Badge -->
+            <span class="nav-link text-warning fw-bold">
+                <i class="fas fa-crown me-1"></i>PREMIUM
+            </span>
+        @else
+            <!-- Upgrade Button -->
+            <a href="{{ route('premium.plans') }}" class="nav-link text-warning fw-bold">
+                <i class="fas fa-rocket me-1"></i>Go Premium
+            </a>
+        @endif
+    @endauth
+</li>
+
                 <!-- Profile Picture Dropdown -->
                 <li class="nav-item dropdown ms-3">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" 

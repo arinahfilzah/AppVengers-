@@ -50,6 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
+        'premium_expires_at' => 'datetime',
         'trusted_devices' => 'array',
         'security_notifications' => 'boolean',
     ];    
@@ -63,11 +64,13 @@ class User extends Authenticatable
         return $this->hasMany(LoginHistory::class);
     }
 
+
+    // Check if user is premium
     public function isPremium()
     {
         return $this->account_type === 'premium' 
             && $this->premium_expires_at 
-            && $this->premium_expires_at->isFuture();
+            && now()->lessThan($this->premium_expires_at);
     }
 
     // Check if user is basic
