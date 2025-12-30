@@ -5,7 +5,7 @@
 @section('content')
 <div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('studylab/images/softpurple.jpg') }}');">
     <div class="overlay"></div>
-    <div class="container"></div>
+    <div class="container" ></div>
 </div>
 
 <section class="ftco-section ftco-no-pb ftco-no-pt" >

@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authentication
+| Authentication Routes
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -58,18 +58,15 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Resource Management
+    | Resource Management Routes
     |--------------------------------------------------------------------------
     */
     Route::get('/upload-resource', [ResourceController::class, 'showUploadForm'])->name('uploadResource');
     Route::post('/upload-resource', [ResourceController::class, 'store'])->name('uploadResource.store');
-
     Route::get('/manage-resource', [ResourceController::class, 'manageResource'])->name('manageResource');
-
     Route::get('/resource/{id}/edit', [ResourceController::class, 'edit'])->name('resource.edit');
     Route::put('/resource/{id}', [ResourceController::class, 'update'])->name('resource.update');
     Route::delete('/resource/{id}', [ResourceController::class, 'destroy'])->name('resource.destroy');
-
     Route::get('/resource/{id}/generate-qr', [ResourceController::class, 'generateQrCode'])->name('resource.generateQr');
     Route::get('/resource/{id}/download-qr', [ResourceController::class, 'downloadQrCode'])->name('resource.downloadQr');
     Route::get('/resource/{id}/download', [ResourceController::class, 'downloadResource'])->name('resource.download');
@@ -85,7 +82,7 @@ Route::middleware('auth')->group(function () {
     /*
     |--------------------------------------------------------------------------
     | Search
-    |--------------------------------------------x------------------------------
+    |--------------------------------------------------------------------------
     */
     Route::get('/search', [ResourceController::class, 'search'])->name('resource.search');
 
@@ -110,43 +107,49 @@ Route::middleware('auth')->group(function () {
 */
 Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('resource.view');
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (Protected by Admin Middleware)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'admin']) // ✅ add auth too
+    ->group(function () {
 
-// ===========================================
-// ADMIN ROUTES
-// ===========================================
-// Replace the previous admin routes with these:
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Admin Dashboard
-    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])
-        ->name('dashboard');
-    
     // Contributor Activities
-    Route::get('/contributors', [App\Http\Controllers\AdminController::class, 'contributorActivities'])
-        ->name('contributor-activities');
-    
-    // AJAX endpoints
-    Route::get('/stats/dashboard', [App\Http\Controllers\AdminController::class, 'getDashboardStats'])
-        ->name('stats.dashboard');
-    
-    Route::get('/stats/contributors', [App\Http\Controllers\AdminController::class, 'getContributors'])
-        ->name('stats.contributors');
+    Route::get('/contributors', [AdminController::class, 'contributorActivities'])->name('contributor-activities');
+    Route::get('/stats/dashboard', [AdminController::class, 'getDashboardStats'])->name('stats.dashboard');
+    Route::get('/stats/contributors', [AdminController::class, 'getContributors'])->name('stats.contributors');
 
     // Verification Routes
     Route::get('/verification', function () {
         return view('admin.verification');
     })->name('verification');
-    
     Route::post('/verification/{id}/approve', [AdminController::class, 'approveVerification']);
     Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification']);
     Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification']);
-    
+
     // Review Routes
     Route::get('/reviews', function () {
         return view('admin.reviews');
     })->name('reviews');
-    
     Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent']);
     Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent']);
-});
+    });
 
+
+        // User Management
+        Route::get('/users', [AdminController::class, 'viewUsers'])->name('viewUsers');
+
+        // ✅ NEW: View user details (UC01 Step 3)
+        Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('showUser');
+
+        Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('editUser');
+        Route::put('/users/{id}/update', [AdminController::class, 'updateUser'])->name('updateUser');
+
+        // ✅ Suspend requires reason now
+        Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
+        Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');

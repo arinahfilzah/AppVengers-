@@ -102,6 +102,11 @@
         padding-bottom: 50px;
     }
 
+    /* ONLY admin pages: adjust spacing below navbar */
+    .admin-page main {
+        padding-top: 100px;   /* change this value to what you need */
+    }
+
     /* Remove bottom padding only for home page */
     .home-main {
         padding-bottom: 0;
@@ -158,9 +163,10 @@
 </style>
 
 </head>
-<body class="@if(Request::routeIs('home')) home-page @endif">
+<body class="@if(Request::routeIs('home')) home-page @endif
+            @if(auth()->check() && auth()->user()->role === 'admin') admin-page @endif">
 
- <!-- ============================
+<!-- ============================
       NAVBAR
 ============================== -->
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light show" id="ftco-navbar">
@@ -272,6 +278,11 @@
         </div>
     </div>
 </nav>
+@if(auth()->check() && auth()->user()->role === 'admin')
+    @include('layouts.partials.navbar-admin')
+@else
+    @include('layouts.partials.navbar-user')
+@endif
 
     <!-- MAIN CONTENT -->
     <main class="@if(Request::routeIs('home')) home-main @endif">

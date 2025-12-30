@@ -38,7 +38,7 @@ class AdminController extends Controller
             ]
         ];
         
-        return view('admin.admindashboard', compact('stats'));
+        return view('admin.dashboard', compact('stats'));
     }
     
     /**
@@ -156,5 +156,84 @@ class AdminController extends Controller
             'contributors' => $contributors,
             'total' => count($contributors)
         ]);
+    }
+
+    // ✅ UC01 Step 1+2: View list + Search
+    public function viewUsers(Request $request)
+    {
+        $search = $request->query('search');
+
+        $users = User::query()
+            ->when($search, function ($q) use ($search) {
+                $q->where('email', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('admin.users.index', compact('users', 'search'));
+    }
+
+    // ✅ UC01 Step 3: View user details
+    public function showUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.show', compact('user'));
+    }
+
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'role' => 'required|in:admin,user',
+            'account_status' => 'required|in:active,suspended',
+        ]);
+
+        $user->role = $request->role;
+        $user->account_status = $request->account_status;
+
+        // If admin manually sets suspended from edit page, allow optional reason
+        if ($request->account_status === 'suspended') {
+            $user->suspended_reason = $request->input('suspended_reason');
+        } else {
+            $user->suspended_reason = null;
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User updated successfully');
+    }
+
+    // ✅ UC02 Step 2–3: Suspend user with reason
+    public function suspendUser(Request $request, $id)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->account_status = 'suspended';
+        $user->suspended_reason = $request->reason;
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User suspended successfully');
+    }
+
+    // ✅ UC02 Step 5: Reactivate user
+    public function reactivateUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->account_status = 'active';
+        $user->suspended_reason = null;
+        $user->save();
+
+        return redirect()->route('admin.viewUsers')->with('success', 'User reactivated successfully');
     }
 }

@@ -62,51 +62,70 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Your account has been deleted successfully.');
     }
     
+// UC02 - Login
+public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-    // UC02 - Login
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+    // ✅ Block suspended BEFORE Auth::attempt
+    $user = User::where('email', $request->email)->first();
 
-        if (Auth::attempt($credentials, $request->remember)) {
-
-            $user = Auth::user();
-            $userAgent = $request->header('User-Agent');
-
-            // --- Convert User-Agent to friendly device name ---
-            $deviceName = $this->parseUserAgent($userAgent);
-
-            // --- Add to Trusted Devices if not already there ---
-            $trustedDevices = $user->trusted_devices ?? [];
-            if (!in_array($deviceName, $trustedDevices)) {
-                // Optional: Limit to last 5 devices
-                if (count($trustedDevices) >= 5) {
-                    array_shift($trustedDevices); // remove oldest device
-                }
-                $trustedDevices[] = $deviceName;
-                $user->trusted_devices = $trustedDevices;
-                $user->save();
-            }
-
-            // --- Save Login History ---
-            LoginHistory::create([
-                'user_id' => $user->id,
-                'ip_address' => $request->ip(),
-                'user_agent' => $deviceName,  // save friendly name
-                'logged_in_at' => now(),
-            ]);
-
-            // --- Save last login ---
-            $user->update([
-                'last_login' => now(),
-            ]);
-
-            $request->session()->regenerate();
-            return redirect('/dashboard');
-        }   
-
-        return back()->withErrors(['loginError' => 'Invalid email or password']);
+    if ($user && $user->account_status === 'suspended') {
+        return back()->withErrors([
+            'loginError' => 'Your account has been suspended. Please contact admin.'
+        ])->withInput();
     }
+
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials, $request->remember)) {
+
+        $user = Auth::user();
+
+        // ✅ Extra safety: if user got suspended AFTER email lookup
+        if ($user->account_status === 'suspended') {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'loginError' => 'Your account has been suspended. Please contact admin.'
+            ])->withInput();
+        }
+
+        $userAgent = $request->header('User-Agent');
+        $deviceName = $this->parseUserAgent($userAgent);
+
+        // Trusted devices
+        $trustedDevices = $user->trusted_devices ?? [];
+        if (!in_array($deviceName, $trustedDevices)) {
+            if (count($trustedDevices) >= 5) {
+                array_shift($trustedDevices);
+            }
+            $trustedDevices[] = $deviceName;
+            $user->trusted_devices = $trustedDevices;
+            $user->save();
+        }
+
+        // Login History
+        LoginHistory::create([
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $deviceName,
+            'logged_in_at' => now(),
+        ]);
+
+        $user->update(['last_login' => now()]);
+
+        $request->session()->regenerate();
+        return redirect('/dashboard');
+    }
+
+    return back()->withErrors(['loginError' => 'Invalid email or password'])->withInput();
+}
 
     /**
     * Parse User-Agent to get friendly device/browser name
@@ -193,16 +212,31 @@ class AuthController extends Controller
         return view('auth.reset-password', compact('token', 'email'));
     }
 
-    // Show Dashboard
-    public function showDashboard()
-    {
-        $user = Auth::user();
+// Show Dashboard
+public function showDashboard()
+{
+    $user = Auth::user();
 
-        return view('dashboard', [
-            'user' => $user,
-            'lastLogin' => $user->last_login ?? 'N/A',
+    // ✅ If user got suspended while already logged in, force logout + block
+    if ($user->account_status === 'suspended') {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect('/login')->withErrors([
+            'loginError' => 'Your account has been suspended. Please contact admin.'
         ]);
     }
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return view('dashboard', [
+        'user' => $user,
+        'lastLogin' => $user->last_login ?? 'N/A',
+    ]);
+}
     
     protected function failedValidation(Validator $validator)
     {
