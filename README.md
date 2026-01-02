@@ -212,7 +212,24 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href=""></a>
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">3</td>
+    <td style="border: 1px solid #999; padding: 8px;">Usage Reports & Subject Insights Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <ul>
+      <li><a href=""> Download Subject Popularity Reports Page </a></li>
+      <li><a href=""> Monitor Resource Usage and Effectiveness Page </a></li>
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller></a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>
