@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CollaborationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,10 +75,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/resource/{id}/download', [ResourceController::class, 'downloadResource'])->name('resource.download');
 
     // Show update version form
-    Route::get('/resource/{id}/update-version',[ResourceController::class, 'showUpdateVersionForm'])->name('resource.updateVersionForm');
+    Route::get('/resource/{id}/update-version', [ResourceController::class, 'showUpdateVersionForm'])->name('resource.updateVersionForm');
 
     // Save new version
-    Route::post('/resource/{id}/update-version',[ResourceController::class, 'storeNewVersion'])->name('resource.storeNewVersion');
+    Route::post('/resource/{id}/update-version', [ResourceController::class, 'storeNewVersion'])->name('resource.storeNewVersion');
 
     // view resource history
     Route::get('/resource/{id}/history', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
@@ -105,6 +106,62 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('resource.view');
+
+
+/*
+|--------------------------------------------------------------------------
+| Version History
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    // NF5: View version history
+    Route::get('/resource/{id}/versions', [ResourceController::class, 'showVersionHistory'])
+        ->name('resource.versionHistory');
+
+    // NF10: Download specific version
+    Route::get('/resource/{resource}/version/{version}/download', [ResourceController::class, 'downloadVersion'])
+        ->name('resource.downloadVersion');
+
+    // NF10: View specific version file (NEW)
+    Route::get('/resource/{resource}/version/{version}/view', [ResourceController::class, 'viewVersion'])
+        ->name('resource.viewVersion');
+
+    // Restore version (Owner only)
+    Route::post('/resource/{resource}/version/{version}/restore', [ResourceController::class, 'restoreVersion'])
+        ->name('resource.restoreVersion');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Collaboration Routes (Protected by Auth Middleware)
+|--------------------------------------------------------------------------
+*/
+// Collaboration Request Routes (Protected by auth middleware)
+Route::middleware(['auth'])->group(function () {
+
+    // Request collaboration access
+    Route::post('/collaboration/request/{resource}', [CollaborationController::class, 'requestCollaboration'])
+        ->name('collaboration.request');
+
+    // View pending collaboration requests (for resource owner)
+    Route::get('/collaboration/requests', [CollaborationController::class, 'viewRequests'])
+        ->name('collaboration.requests');
+
+    //  Approve collaboration request
+    Route::post('/collaboration/approve/{request}', [CollaborationController::class, 'approveRequest'])
+        ->name('collaboration.approve');
+
+    // Reject collaboration request
+    Route::post('/collaboration/reject/{request}', [CollaborationController::class, 'rejectRequest'])
+        ->name('collaboration.reject');
+
+    // View user's own collaboration requests
+    Route::get('/collaboration/my-requests', [CollaborationController::class, 'myRequests'])
+        ->name('collaboration.myRequests');
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Resource;
 use App\Models\ResourceVersion;
+use App\Models\CollaborationRequest; // ADD THIS LINE
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,6 +13,8 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
+
+
 
 class ResourceController extends Controller
 {
@@ -62,18 +65,35 @@ class ResourceController extends Controller
     {
         $user = auth()->user();
 
-        $resources = Resource::where(function ($query) use ($user) {
-            $query->where('uploader_id', $user->id)
-                ->orWhereHas('collaborators', fn($q) => $q->where('user_id', $user->id));
-        })
-            ->with('versions')
+        // Get pending collaboration requests for resources owned by the user
+        $pendingRequests = CollaborationRequest::with(['resource', 'requester'])
+            ->whereHas('resource', function ($query) use ($user) {
+                $query->where('uploader_id', $user->id);
+            })
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('resource.manageResource', compact('resources'));
-    }
-    private function canEdit(Resource $resource)
-    {
-        return $resource->uploader_id === auth()->id() || $resource->collaborators->contains('user_id', auth()->id());
+        // Get resources where user is a collaborator (not owner)
+        $collaboratedResources = Resource::whereHas('collaborators', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+            ->where('uploader_id', '!=', $user->id)
+            ->with(['versions', 'uploader', 'collaborators'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Get resources owned by the user
+        $ownedResources = Resource::where('uploader_id', $user->id)
+            ->with(['versions', 'collaborators'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('resource.manageResource', compact(
+            'pendingRequests',
+            'collaboratedResources',
+            'ownedResources'
+        ));
     }
 
 
@@ -152,7 +172,7 @@ class ResourceController extends Controller
         $resource->save();
 
         // NF13: Success message
-        return redirect()->route('resource.manageResource')->with('version_success', 'Resource updated successfully! New version: v' . $resource->current_version);
+        return redirect()->route('manageResource')->with('version_success', 'Resource updated successfully! New version: v' . $resource->current_version);
     }
 
     public function showUploadForm()
@@ -166,7 +186,7 @@ class ResourceController extends Controller
 
         // Check ownership
         if ($resource->uploader_id !== auth()) {
-            return redirect()->route('resource.manageResource')->with('error', 'Unauthorized access.');
+            return redirect()->route('manageResource')->with('error', 'Unauthorized access.');
         }
 
         // Delete current file
@@ -192,33 +212,95 @@ class ResourceController extends Controller
     }
 
 
+    // NF5: View Version History (Updated to include collaborators)
     public function showVersionHistory($id)
     {
-        $resource = Resource::with(['versions.updater'])->findOrFail($id);
+        try {
+            $resource = Resource::with(['versions.updater', 'collaborators'])->findOrFail($id);
 
-        // Check ownership
-        if ($resource->uploader_id !== auth()->id()) {
-            return redirect()->route('manageResource')->with('error', 'Unauthorized access.');
+            // Check if user is owner or collaborator
+            if (!$this->canEdit($resource)) {
+                return redirect()->route('manageResource')
+                    ->with('error', 'Unauthorized access. You must be the owner or collaborator to view version history.');
+            }
+
+
+            if ($resource->versions->isEmpty()) {
+                return view('resource.versionHistory', compact('resource'))
+                    ->with('info', 'No previous versions available for this resource.');
+            }
+
+            // Display version history
+            return view('resource.versionHistory', compact('resource'));
+        } catch (\Exception $e) {
+            // Network/Database error
+            return redirect()->route('manageResource')
+                ->with('error', 'Unable to load version history. Please try again later.');
         }
-
-        return view('resource.versionHistory', compact('resource'));
     }
 
     // Download specific version
     public function downloadVersion($resourceId, $versionNumber)
     {
-        $resource = Resource::findOrFail($resourceId);
-        $version = ResourceVersion::where('resource_id', $resourceId)
-            ->where('version_number', $versionNumber)
-            ->firstOrFail();
+        try {
+            $resource = Resource::findOrFail($resourceId);
 
-        $path = storage_path('app/public/uploads/' . $version->file_path);
+            // Check if user has permission to download
+            if (!$this->canEdit($resource)) {
+                return redirect()->back()->with('error', 'Unauthorized access.');
+            }
 
-        if (!file_exists($path)) {
-            return redirect()->back()->with('error', 'Version file not found.');
+            $version = ResourceVersion::where('resource_id', $resourceId)
+                ->where('version_number', $versionNumber)
+                ->firstOrFail();
+
+            $path = storage_path('app/public/uploads/' . $version->file_path);
+
+            //File cannot be opened
+            if (!file_exists($path)) {
+                return redirect()->back()->with('error', 'File cannot be opened on this device.');
+            }
+
+            //  Download file
+            return response()->download($path, 'v' . $versionNumber . '_' . basename($version->file_path));
+        } catch (\Exception $e) {
+            // Network error
+            return redirect()->back()->with('error', 'Unable to download version. Please try again later.');
         }
+    }
 
-        return response()->download($path, 'v' . $versionNumber . '_' . $version->file_path);
+    public function viewVersion($resourceId, $versionNumber)
+    {
+        try {
+            $resource = Resource::findOrFail($resourceId);
+
+            // Check if user has permission to view
+            if (!$this->canEdit($resource)) {
+                return redirect()->back()->with('error', 'Unauthorized access.');
+            }
+
+            $version = ResourceVersion::where('resource_id', $resourceId)
+                ->where('version_number', $versionNumber)
+                ->firstOrFail();
+
+            $path = storage_path('app/public/uploads/' . $version->file_path);
+
+            // AF2: File cannot be opened
+            if (!file_exists($path)) {
+                return redirect()->back()->with('error', 'File cannot be opened on this device.');
+            }
+
+            // NF10: Return file for viewing
+            $fileContent = file_get_contents($path);
+            $mimeType = mime_content_type($path);
+
+            return response($fileContent)
+                ->header('Content-Type', $mimeType)
+                ->header('Content-Disposition', 'inline; filename="v' . $versionNumber . '_' . basename($version->file_path) . '"');
+        } catch (\Exception $e) {
+            // EF1: Network error
+            return redirect()->back()->with('error', 'Unable to view version. Please try again later.');
+        }
     }
 
     // Restore specific version as current
@@ -489,5 +571,10 @@ class ResourceController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Unable to load content. Please try again later.');
         }
+    }
+
+    private function canEdit(Resource $resource)
+    {
+        return $resource->uploader_id === auth()->id() ||$resource->collaborators->contains('id', auth()->id());
     }
 }
