@@ -154,7 +154,7 @@
     <td style="border: 1px solid #999; padding: 8px;">Subject Repository with QR Intergration</td>
     <td style="border: 1px solid #999; padding: 8px;">
     <ul>
-      <li><a href="resources/views/resource/manageResource.blade.php"> Generate Qr in ManageResource</a></li>
+      <li><a href="resources/views/resource/manageResource.blade.php"> Generate Qr View</a></li>
       <li><a href="resources/views/resource/search.blade.php"> Search Subject Repository View</a></li>
       <li><a href="resources/views/course/course-subject.blade.php"> Course Subject View</a></li>  
       <li><a href="resources/views/course/course.blade.php"> Subject View</a></li>  
