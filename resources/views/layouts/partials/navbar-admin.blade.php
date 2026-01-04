@@ -38,6 +38,20 @@
                     <a href="{{ route('admin.reviews') }}" class="nav-link">Reviews</a>
                 </li>
 
+                <!-- Subject Reports -->
+                <li class="nav-item @if(Request::routeIs('admin.analytics.subjectreport')) active @endif">
+                    <a href="{{ route('admin.analytics.subjectreport') }}" class="nav-link">
+                        <i class="fa fa-chart-bar me-1"></i> Subject Reports
+                    </a>
+                </li>
+
+                <!-- Resource Analytics -->
+                <li class="nav-item @if(Request::routeIs('admin.analytics.performance')) active @endif">
+                    <a href="{{ route('admin.analytics.performance') }}" class="nav-link">
+                        <i class="fa fa-tachometer-alt me-1"></i> Resource Analytics
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown ms-3">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
                         <img src="{{ auth()->user()->profile_picture
