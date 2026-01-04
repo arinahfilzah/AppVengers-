@@ -195,6 +195,7 @@
     <ul>
       <li><a href="app/Models/Resource.php"> Resource Database</a></li>
       <li><a href="app/Models/Resource.php"> Resource Version Database</a></li>
+      <li><a href="app/Models/Resource.php"> Collaborator Database</a></li>
     </ul>
     </td>
   </tr>
