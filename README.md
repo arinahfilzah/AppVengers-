@@ -148,6 +148,56 @@
     </ul>
     </td>
   </tr>
+
+  <tr>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Subject Repository with QR Intergration</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="resources/views/resource/manageResource.blade.php"> Generate Qr in ManageResource</a></li>
+      <li><a href="resources/views/resource/search.blade.php"> Search Subject Repository View</a></li>
+      <li><a href="resources/views/course/course-subject.blade.php"> Course Subject View</a></li>  
+      <li><a href="resources/views/course/course.blade.php"> Subject View</a></li>  
+      <li><a href="resources/views/resource/qrError.blade.php"> Qr Error View</a></li>  
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="app/Http/Controllers/ResourceController.php"> Resource Controller</a></li>
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="app/Models/Resource.php"> Resource Database</a></li>
+    </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: 1px solid #999; padding: 8px;">3</td>
+    <td style="border: 1px solid #999; padding: 8px;">Resource Versioning and Collaboration</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="resources/views/resource/manageResource.blade.php"> Manage Resource View</a></li>
+      <li><a href="resources/views/resource/updateVersion.blade.php"> Update Version Form View</a></li>
+      <li><a href="resources/views/resource/versionHistory.blade.php"> Version History View</a></li>  
+      <li><a href="resources/views/collaboration/myRequest.blade.php"> Requesting Collaboration View</a></li>  
+      <li><a href="resources/views/collaboration/requests.blade.php"> Collaboration Notify View</a></li>  
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="app/Http/Controllers/ResourceController.php"> Resource Controller</a></li>
+      <li><a href="app/Http/Controllers/CollaborationController.php"> Collaboration Controller</a></li>
+    </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+    <ul>
+      <li><a href="app/Models/Resource.php"> Resource Database</a></li>
+      <li><a href="app/Models/Resource.php"> Resource Version Database</a></li>
+    </ul>
+    </td>
+  </tr>
 </table>
 
 <h4>SUBSYSTEM 3 : NUR AYUNI BINTI NOOR AZMAN  </h4>
