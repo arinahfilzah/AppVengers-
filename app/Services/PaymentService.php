@@ -10,44 +10,57 @@ use Illuminate\Support\Str;
 class PaymentService
 {
     // Process mock payment
+
     public function processMockPayment(User $user, PremiumPlan $plan, array $paymentData)
-    {
-        // Generate transaction ID
-        $transactionId = 'MOCK-' . strtoupper(uniqid()) . '-' . date('Ymd');
-        
-        // Determine payment status based on test card
-        $status = $this->determinePaymentStatus($paymentData['card_number']);
-        
-        // Create payment record
-        $payment = MockPayment::create([
-            'user_id' => $user->id,
-            'plan_id' => $plan->id,
-            'transaction_id' => $transactionId,
-            'amount' => 0.00, // Mock payment
-            'currency' => 'LKR',
-            'status' => $status,
-            'payment_method' => 'credit_card',
-            'card_last_four' => substr($paymentData['card_number'], -4),
-            'card_brand' => $this->getCardBrand($paymentData['card_number']),
-            'payment_details' => [
-                'card_number' => $paymentData['card_number'],
-                'expiry_month' => $paymentData['expiry_month'],
-                'expiry_year' => $paymentData['expiry_year'],
-                'cvc' => $paymentData['cvc'],
-                'cardholder_name' => $paymentData['cardholder_name'],
-            ],
-            'processed_at' => now(),
-        ]);
+{
+    // Generate transaction ID
+    $transactionId = 'MOCK-' . strtoupper(uniqid()) . '-' . date('Ymd');
 
-        // If payment successful, upgrade user
-        if ($status === 'success') {
-            $user->account_type = 'premium';
-            $user->premium_expires_at = now()->addDays($plan->duration_days);
-            $user->save();
-        }
+    // Determine payment status
+    $status = $this->determinePaymentStatus(str_replace(' ', '', $paymentData['card_number']));
 
-        return $payment;
+    // Record wallet balances
+    $balanceBefore = $user->wallet_balance ?? 0;
+    $balanceAfter = $balanceBefore;
+
+    if ($status === 'success') {
+        // Deduct price from wallet
+        $balanceAfter = $balanceBefore - $plan->price;
+        $user->wallet_balance = $balanceAfter;
+
+        // Upgrade to premium
+        $user->account_type = 'premium';
+        $user->premium_expires_at = now()->addDays($plan->duration_days);
+        $user->save();
     }
+
+    // Create payment record
+    $payment = MockPayment::create([
+        'user_id' => $user->id,
+        'plan_id' => $plan->id,
+        'transaction_id' => $transactionId,
+        'amount' => $plan->price,
+        'currency' => 'MYR',
+        'status' => $status,
+        'payment_method' => 'credit_card',
+        'card_last_four' => substr(str_replace(' ', '', $paymentData['card_number']), -4),
+        'card_brand' => $this->getCardBrand($paymentData['card_number']),
+        'balance_before' => $balanceBefore,
+        'balance_after' => $balanceAfter,
+        'payment_details' => [
+            'card_number' => $paymentData['card_number'],
+            'expiry_month' => $paymentData['expiry_month'],
+            'expiry_year' => $paymentData['expiry_year'],
+            'cvc' => $paymentData['cvc'],
+            'cardholder_name' => $paymentData['cardholder_name'],
+        ],
+        'processed_at' => now(),
+    ]);
+
+    return $payment;
+}
+
+
 
     // Determine if payment succeeds or fails based on test card
     private function determinePaymentStatus($cardNumber)

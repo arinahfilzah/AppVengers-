@@ -28,18 +28,23 @@
                                 <div class="card-body">
                                     <h6>{{ $plan->name }}</h6>
                                     <p class="text-muted">{{ $plan->description }}</p>
-                                    
+
                                     <hr>
-                                    
+
                                     <div class="d-flex justify-content-between">
                                         <span>Amount:</span>
-                                        <strong>{{ $plan->formatted_price }}</strong>
+                                        <strong>RM {{ number_format($plan->price, 2) }}</strong>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <span>Duration:</span>
                                         <span>{{ $plan->duration_days }} days</span>
                                     </div>
-                                    
+
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span>Your Wallet:</span>
+                                        <strong>RM {{ number_format(Auth::user()->wallet_balance, 2) }}</strong>
+                                    </div>
+
                                     <div class="mt-3 p-3 bg-light rounded">
                                         <small class="text-muted">
                                             <i class="fas fa-shield-alt me-1"></i>
@@ -147,6 +152,11 @@
                                         Cancel
                                     </a>
                                 </div>
+
+                                <!-- Optional: Live Wallet Hint -->
+                                <div class="mt-3 text-muted">
+                                    <small>Your wallet after purchase will be: <strong>RM {{ number_format(Auth::user()->wallet_balance - $plan->price, 2) }}</strong></small>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -158,7 +168,7 @@
 
 @push('scripts')
 <script>
-    // Add loading state to submit button
+    // Loading state
     document.getElementById('paymentForm').addEventListener('submit', function() {
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
@@ -169,7 +179,7 @@
     document.getElementById('card_number').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
         let formatted = value.replace(/(\d{4})/g, '$1 ').trim();
-        e.target.value = formatted.substring(0, 19); // 16 digits + 3 spaces
+        e.target.value = formatted.substring(0, 19);
     });
 </script>
 @endpush

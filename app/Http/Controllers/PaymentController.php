@@ -51,8 +51,12 @@ class PaymentController extends Controller
 
         // Redirect based on result
         if ($payment->status === 'success') {
-            return redirect()->route('premium.success')
-                ->with('success', 'Payment successful! Your account has been upgraded to premium.');
+            return redirect()->route('premium.success')->with([
+                'success' => 'Payment successful!',
+                'balance_before' => $payment->balance_before,
+                'balance_after' => $payment->balance_after,
+            ]);
+
         } else {
             return redirect()->route('premium.checkout', $plan->id)
                 ->with('error', 'Payment failed. Please try again with a different card.');

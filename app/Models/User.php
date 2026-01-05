@@ -32,6 +32,7 @@ class User extends Authenticatable
         'phone_number',
         'account_status',
         'suspended_reason',
+        'wallet_balance',
     ];    
 
     /**
@@ -112,4 +113,9 @@ class User extends Authenticatable
         return $this->hasMany(MockPayment::class);
     }
 
+    public function deductBalance($amount)
+    {
+        $this->wallet_balance -= $amount;
+        $this->save();
+    }
 }
