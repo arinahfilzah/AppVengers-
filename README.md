@@ -159,6 +159,7 @@
       <li><a href="resources/views/course/course-subject.blade.php"> Course Subject View</a></li>  
       <li><a href="resources/views/course/course.blade.php"> Subject View</a></li>  
       <li><a href="resources/views/resource/qrError.blade.php"> Qr Error View</a></li>  
+      <li><a href="resources/views/resource/viewResource.blade.php"> View Resource via QR</a></li>  
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
