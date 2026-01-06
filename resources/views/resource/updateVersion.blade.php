@@ -42,9 +42,9 @@
                         <h5 class="mb-0"><i class="fa fa-edit"></i> Save New Version</h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('resource.update', $resource->id) }}" method="POST" enctype="multipart/form-data">
+
+                        <form action="{{ route('resource.storeNewVersion', $resource->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
 
                             {{-- Title --}}
                             <div class="mb-3">

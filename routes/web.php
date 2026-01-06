@@ -151,6 +151,10 @@ Route::middleware(['auth'])->group(function () {
     // Restore version (Owner only)
     Route::post('/resource/{resource}/version/{version}/restore', [ResourceController::class, 'restoreVersion'])
         ->name('resource.restoreVersion');
+
+    Route::post('/resource/{id}/new-version', [ResourceController::class, 'storeNewVersion'])
+    ->name('resource.storeNewVersion');
+
 });
 
 
