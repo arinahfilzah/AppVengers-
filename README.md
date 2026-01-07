@@ -225,6 +225,21 @@
       <a href=""></a>
     </td>
   </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Premium Plan and Mock Payment Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href="app/Models/MockPayment.php"> MockPayment Model </a>
+    
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
 </table>
 
 <h4>SUBSYSTEM 4 : ABID HUMAYRAA BINTI HARDISURA </h4>
