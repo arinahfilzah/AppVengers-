@@ -236,9 +236,27 @@ Route::prefix('admin')
             return view('admin.analytics.performance');
         })->name('analytics.performance');
 
-        Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])->name('analytics.generate');
-        Route::get('/analytics/performance/data', [AnalyticsController::class, 'getPerformanceData'])->name('analytics.performance.data');
-        Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
-        Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
-    });
+        Route::get('/analytics/subjectreport', function () {
+            return view('admin.analytics.subjectreport');
+        })->name('analytics.subjectreport');
 
+        Route::get('/subject-reports', [SubjectReportController::class, 'index'])->name('subject.reports');
+        Route::post('/subject-reports/generate', [SubjectReportController::class, 'generateReport'])->name('subject.reports.generate');
+
+        Route::get('admin/analytics/performance.data', function () {
+            return view('admin.analytics.performance.data');
+        })->name('analytics.performance');
+
+       Route::get('/analytics/subject-reports', function () {
+        return view('admin.analytics.subject-reports');
+        })->name('analytics.subject-reports');
+        
+        Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])
+            ->name('analytics.generate');
+        
+        Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])
+            ->name('analytics.export.pdf');
+        
+        Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])
+            ->name('analytics.export.excel'); 
+    });
