@@ -12,6 +12,7 @@ use App\Http\Controllers\PremiumController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\CollaborationController;
+use App\Http\Controllers\RecommendationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -260,3 +261,27 @@ Route::prefix('admin')
         Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])
             ->name('analytics.export.excel'); 
     });
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    
+    // Subject Reports (UC08)
+    Route::get('/analytics/subjectreport', function () {
+        return view('admin.analytics.subjectreport');
+    })->name('analytics.subjectreport');
+    
+    // Resource Analytics (UC09)
+    Route::get('/analytics/performance', function () {
+        return view('admin.analytics.performance');
+    })->name('analytics.performance');
+    
+    // AJAX Endpoints
+    Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])->name('analytics.generate');
+    Route::get('/analytics/performance/data', [AnalyticsController::class, 'getPerformanceData'])->name('analytics.performance.data');
+    Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
+    Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
+});
+
+// Recommendation Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/recommendations', [RecommendationController::class, 'index'])
+        ->name('recommendations.index');
+});

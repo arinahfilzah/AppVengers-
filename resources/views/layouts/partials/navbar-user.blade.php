@@ -28,6 +28,14 @@
                     <a href="{{ route('course') }}" class="nav-link">Courses</a>
                 </li>
 
+                <!-- AI Recommendations -->
+                <li class="nav-item @if(Request::routeIs('recommendations.index')) active @endif">
+                    <a class="nav-link" href="{{ route('recommendations.index') }}">
+                        <i class="fas fa-robot me-1"></i> AI Recommendations
+                    </a>
+                </li>
+
+
                 <!-- Search Resources -->
                 <li class="nav-item @if(Request::routeIs('resource.search')) active @endif">
                     <a href="{{ route('resource.search') }}" class="nav-link">Search Resources</a>
