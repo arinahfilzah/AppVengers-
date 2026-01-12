@@ -3,7 +3,7 @@
 @section('title', 'Subject Reports')
 
 @section('content')
-<div class="container-fluid px-4">
+<div class="container py-4" style="max-width: 1200px; min-height: calc(100vh - 80px);">
 
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,9 +22,9 @@
                 <div class="col-md-4">
                     <label class="form-label">Date Range</label>
                     <div class="input-group">
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" id="startDate">
                         <span class="input-group-text">to</span>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" id="endDate">
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-primary w-100" onclick="loadDemoData()">
+                    <button class="btn btn-primary w-100" onclick="generateSubjectReport()">
                         <i class="fas fa-play me-1"></i> Generate Report
                     </button>
                 </div>
@@ -64,15 +64,6 @@
                 <div class="card-body">
                     <h2 class="text-success" id="totalSubjects">0</h2>
                     <p class="text-muted">Subjects</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h2 class="text-info" id="avgRating">0</h2>
-                    <p class="text-muted">Avg Rating</p>
                 </div>
             </div>
         </div>
@@ -125,7 +116,6 @@
                         <th>Subject</th>
                         <th>Downloads</th>
                         <th>Resources</th>
-                        <th>Rating</th>
                         <th>Trend</th>
                     </tr>
                 </thead>
@@ -149,91 +139,104 @@
 <script>
 let chart = null;
 
-/* HARD CODED DATA */
-const demoData = {
-    stats: {
-        downloads: 2300,
-        subjects: 25,
-        rating: 4.2,
-        users: 120
-    },
-    chart: {
-        labels: [
-            'Software Engineering',
-            'Database',
-            'Data Structures',
-            'Web Programming',
-            'Networks'
-        ],
-        data: [450, 380, 340, 300, 260]
-    },
-    subjects: [
-        { name: 'Software Engineering', downloads: 450, resources: 35, rating: 4.8, trend: '↑' },
-        { name: 'Database Systems', downloads: 380, resources: 28, rating: 4.6, trend: '↑' },
-        { name: 'Data Structures', downloads: 340, resources: 30, rating: 4.7, trend: '↑' },
-        { name: 'Web Programming', downloads: 300, resources: 25, rating: 4.4, trend: '→' },
-        { name: 'Computer Networks', downloads: 260, resources: 20, rating: 4.2, trend: '↓' }
-    ],
-    insights: [
-        'Software Engineering is the most popular subject.',
-        'Web Programming shows stable performance.',
-        'Network-related subjects need more engagement.'
-    ]
-};
+document.addEventListener('DOMContentLoaded', () => {
+    // Optional: auto-run with default last 30 days
+    generateSubjectReport();
+});
 
-function loadDemoData() {
+function generateSubjectReport() {
+    const start = document.getElementById('startDate').value;
+    const end   = document.getElementById('endDate').value;
+    const year  = document.getElementById('yearFilter').value;
 
-    /* Stats */
-    document.getElementById('totalDownloads').innerText = demoData.stats.downloads;
-    document.getElementById('totalSubjects').innerText = demoData.stats.subjects;
-    document.getElementById('avgRating').innerText = demoData.stats.rating;
-    document.getElementById('activeUsers').innerText = demoData.stats.users;
+    // Loading state
+    document.getElementById('reportTable').innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center text-muted">Loading...</td>
+        </tr>
+    `;
+    document.getElementById('insightsList').innerHTML = `
+        <p class="text-muted text-center">Generating report...</p>
+    `;
 
-    /* Chart */
-    const ctx = document.getElementById('subjectChart');
-    if (chart) chart.destroy();
+    fetch(`{{ route('admin.analytics.subjectreport.data') }}?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&year=${encodeURIComponent(year)}`)
+        .then(r => r.json())
+        .then(res => {
+            if (!res.success) throw new Error('Failed');
 
-    chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: demoData.chart.labels,
-            datasets: [{
-                data: demoData.chart.data,
-                backgroundColor: 'rgba(54,162,235,0.7)'
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+            // Cards
+            document.getElementById('totalDownloads').innerText = (res.stats.downloads ?? 0).toLocaleString();
+            document.getElementById('totalSubjects').innerText  = (res.stats.subjects ?? 0).toLocaleString();
+            document.getElementById('activeUsers').innerText    = (res.stats.users ?? 0).toLocaleString();
 
-    /* Table */
-    let rows = '';
-    demoData.subjects.forEach((s, i) => {
-        rows += `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${s.name}</td>
-                <td>${s.downloads}</td>
-                <td>${s.resources}</td>
-                <td>${s.rating}</td>
-                <td>${s.trend}</td>
-            </tr>
-        `;
-    });
-    document.getElementById('reportTable').innerHTML = rows;
+            // Chart
+            const ctx = document.getElementById('subjectChart');
+            if (chart) chart.destroy();
 
-    /* Insights */
-    let insightsHTML = '';
-    demoData.insights.forEach(i => {
-        insightsHTML += `<div class="alert alert-light">${i}</div>`;
-    });
-    document.getElementById('insightsList').innerHTML = insightsHTML;
-    
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: res.chart.labels,
+                    datasets: [{
+                        data: res.chart.data,
+                        backgroundColor: 'rgba(54,162,235,0.7)'
+                    }]
+                },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Table
+            let rowsHtml = '';
+            if (!res.rows || res.rows.length === 0) {
+                rowsHtml = `
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No data for selected filters</td>
+                    </tr>
+                `;
+            } else {
+                res.rows.forEach((s, i) => {
+                    rowsHtml += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${s.subject}</td>
+                            <td>${(s.downloads ?? 0).toLocaleString()}</td>
+                            <td>${(s.resources ?? 0).toLocaleString()}</td>
+                            <td>${s.trend ?? '→'}</td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('reportTable').innerHTML = rowsHtml;
+
+            // Insights
+            let insightsHTML = '';
+            (res.insights ?? []).forEach(t => {
+                insightsHTML += `<div class="alert alert-light">${t}</div>`;
+            });
+            document.getElementById('insightsList').innerHTML = insightsHTML || `<p class="text-muted text-center">No insights</p>`;
+        })
+        .catch(() => {
+            document.getElementById('reportTable').innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-danger">Failed to load report</td>
+                </tr>
+            `;
+            document.getElementById('insightsList').innerHTML = `
+                <p class="text-danger text-center">Error generating report</p>
+            `;
+        });
 }
 
-/* Auto load */
-loadDemoData();
+// Optional: export CSV
+function exportSubjectReport() {
+    const start = document.getElementById('startDate').value;
+    const end   = document.getElementById('endDate').value;
+    const year  = document.getElementById('yearFilter').value;
+
+    window.open(`{{ route('admin.analytics.subjectreport.export') }}?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&year=${encodeURIComponent(year)}`, '_blank');
+}
 </script>
 @endpush

@@ -13,6 +13,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\CollaborationController;
 use App\Http\Controllers\RecommendationController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\SubjectReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,7 +208,7 @@ Route::prefix('admin')
         Route::get('/stats/dashboard', [AdminController::class, 'getDashboardStats'])->name('stats.dashboard');
         Route::get('/stats/contributors', [AdminController::class, 'getContributors'])->name('stats.contributors');
 
-        // Verification
+        // Verification (if you have these methods in AdminController)
         Route::get('/verification', function () {
             return view('admin.verification');
         })->name('verification');
@@ -214,14 +216,13 @@ Route::prefix('admin')
         Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification'])->name('verification.reject');
         Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification'])->name('verification.requestInfo');
 
-        // Reviews
-        Route::get('/reviews', function () {
-            return view('admin.reviews');
-        })->name('reviews');
+        // ✅ Reviews (Content Review)
+        Route::get('/reviews', [AdminController::class, 'reviews'])->name('reviews');
+        Route::get('/reviews/{id}/preview', [AdminController::class, 'previewContent'])->name('reviews.preview');
         Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent'])->name('reviews.approve');
         Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent'])->name('reviews.remove');
 
-        // User Management (UC01 / UC02 / UC03)
+        // User Management
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('viewUsers');
         Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('showUser');
         Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('editUser');
@@ -229,59 +230,32 @@ Route::prefix('admin')
         Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
         Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
 
-        Route::get('/analytics/subjectreport', function () {
-            return view('admin.analytics.subjectreport');
-        })->name('analytics.subjectreport');
+        // ✅ Analytics - Subject report
+        // ✅ Analytics - Subject Reports (UC08)
+        Route::get('/analytics/subjectreport', [AdminController::class, 'subjectReportPage'])
+            ->name('analytics.subjectreport');
 
-        Route::get('/analytics/performance', function () {
-            return view('admin.analytics.performance');
-        })->name('analytics.performance');
+        Route::get('/analytics/subjectreport/data', [AdminController::class, 'subjectReportData'])
+            ->name('analytics.subjectreport.data');
 
-        Route::get('/analytics/subjectreport', function () {
-            return view('admin.analytics.subjectreport');
-        })->name('analytics.subjectreport');
+        Route::get('/analytics/subjectreport/export', [AdminController::class, 'exportSubjectReport'])
+            ->name('analytics.subjectreport.export');
 
-        Route::get('/subject-reports', [SubjectReportController::class, 'index'])->name('subject.reports');
-        Route::post('/subject-reports/generate', [SubjectReportController::class, 'generateReport'])->name('subject.reports.generate');
+        // ✅ Analytics - Performance (DB version)
+        Route::get('/analytics/performance', [AdminController::class, 'performancePage'])->name('analytics.performance');
+        Route::get('/analytics/performance/data', [AdminController::class, 'performanceData'])->name('analytics.performance.data');
+        Route::get('/analytics/performance/export', [AdminController::class, 'exportPerformanceReport'])->name('analytics.performance.export');
 
-        Route::get('admin/analytics/performance.data', function () {
-            return view('admin.analytics.performance.data');
-        })->name('analytics.performance');
-
-       Route::get('/analytics/subject-reports', function () {
-        return view('admin.analytics.subject-reports');
-        })->name('analytics.subject-reports');
-        
-        Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])
-            ->name('analytics.generate');
-        
-        Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])
-            ->name('analytics.export.pdf');
-        
-        Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])
-            ->name('analytics.export.excel'); 
+        // If you still use AnalyticsController export/pdf/excel (optional)
+        Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])->name('analytics.generate');
+        Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
+        Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
     });
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    
-    // Subject Reports (UC08)
-    Route::get('/analytics/subjectreport', function () {
-        return view('admin.analytics.subjectreport');
-    })->name('analytics.subjectreport');
-    
-    // Resource Analytics (UC09)
-    Route::get('/analytics/performance', function () {
-        return view('admin.analytics.performance');
-    })->name('analytics.performance');
-    
-    // AJAX Endpoints
-    Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])->name('analytics.generate');
-    Route::get('/analytics/performance/data', [AnalyticsController::class, 'getPerformanceData'])->name('analytics.performance.data');
-    Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
-    Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
-});
 
-// Recommendation Routes
+
+// Recommendation Routes (NOT admin)
 Route::middleware(['auth'])->group(function () {
     Route::get('/recommendations', [RecommendationController::class, 'index'])
         ->name('recommendations.index');
 });
+

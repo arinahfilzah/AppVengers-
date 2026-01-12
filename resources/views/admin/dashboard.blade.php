@@ -1,3 +1,4 @@
+{{-- resources/views/admin/dashboard.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Admin Dashboard')
@@ -14,7 +15,9 @@
                     <p class="text-muted mb-0">Summary of system statistics and activities</p>
                 </div>
                 <div>
-                    <span class="badge bg-primary">Last updated: Today</span>
+                    <span class="badge bg-primary">
+                        Last updated: {{ now()->format('M d, Y') }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -28,48 +31,44 @@
                     <div class="mb-3">
                         <i class="fas fa-users fa-2x text-primary"></i>
                     </div>
-                    <h2 class="fw-bold mb-1">1,245</h2>
+                    <h2 class="fw-bold mb-1">{{ number_format($stats['totalUsers'] ?? 0) }}</h2>
                     <p class="text-muted mb-0">Total Users</p>
-                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 12% from last month</small>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-4">
                     <div class="mb-3">
                         <i class="fas fa-user-edit fa-2x text-success"></i>
                     </div>
-                    <h2 class="fw-bold mb-1">87</h2>
+                    <h2 class="fw-bold mb-1">{{ number_format($stats['totalContributors'] ?? 0) }}</h2>
                     <p class="text-muted mb-0">Total Contributors</p>
-                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 5 new this week</small>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-4">
                     <div class="mb-3">
                         <i class="fas fa-file-upload fa-2x text-info"></i>
                     </div>
-                    <h2 class="fw-bold mb-1">3,560</h2>
+                    <h2 class="fw-bold mb-1">{{ number_format($stats['totalUploads'] ?? 0) }}</h2>
                     <p class="text-muted mb-0">Total Uploads</p>
-                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 45 today</small>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-4">
                     <div class="mb-3">
                         <i class="fas fa-user-clock fa-2x text-warning"></i>
                     </div>
-                    <h2 class="fw-bold mb-1">412</h2>
+                    <h2 class="fw-bold mb-1">{{ number_format($stats['activeUsers'] ?? 0) }}</h2>
                     <p class="text-muted mb-0">Active Users (24h)</p>
-                    <small class="text-danger"><i class="fas fa-arrow-down me-1"></i> 3% from yesterday</small>
                 </div>
             </div>
         </div>
@@ -89,6 +88,7 @@
                         </a>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
@@ -102,85 +102,60 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://ui-avatars.com/api/?name=Aisyah+Rahman&background=667eea&color=fff&rounded=true" 
-                                                 class="rounded-circle me-3" width="40" height="40" alt="Aisyah">
-                                            <div>
-                                                <strong>Aisyah Rahman</strong>
-                                                <div class="text-muted small">Top Contributor</div>
+                                @forelse(($stats['topContributors'] ?? []) as $c)
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($c->name ?? 'User') }}&background=667eea&color=fff&rounded=true"
+                                                    class="rounded-circle me-3" width="40" height="40" alt="{{ $c->name }}">
+                                                <div>
+                                                    <strong>{{ $c->name ?? '-' }}</strong>
+                                                    <div class="text-muted small">Contributor</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>aisyrah@example.com</td>
-                                    <td>
-                                        <span class="badge bg-primary">120</span>
-                                    </td>
-                                    <td>2 hours ago</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://ui-avatars.com/api/?name=Daniel+Hakim&background=764ba2&color=fff&rounded=true" 
-                                                 class="rounded-circle me-3" width="40" height="40" alt="Daniel">
-                                            <div>
-                                                <strong>Daniel Hakim</strong>
-                                                <div class="text-muted small">Verified Contributor</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>danielh@example.com</td>
-                                    <td>
-                                        <span class="badge bg-primary">98</span>
-                                    </td>
-                                    <td>1 day ago</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://ui-avatars.com/api/?name=Siti+Aminah&background=f56565&color=fff&rounded=true" 
-                                                 class="rounded-circle me-3" width="40" height="40" alt="Siti">
-                                            <div>
-                                                <strong>Siti Aminah</strong>
-                                                <div class="text-muted small">New Contributor</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>sitia@example.com</td>
-                                    <td>
-                                        <span class="badge bg-primary">15</span>
-                                    </td>
-                                    <td>3 days ago</td>
-                                    <td>
-                                        <span class="badge bg-warning">Pending Review</span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-warning">
-                                            <i class="fas fa-clock"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                        </td>
+
+                                        <td>{{ $c->email }}</td>
+
+                                        <td>
+                                            <span class="badge bg-primary">
+                                                {{ (int) ($c->upload_count ?? 0) }}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @if(!empty($c->last_activity_at))
+                                                {{ \Carbon\Carbon::parse($c->last_activity_at)->diffForHumans() }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            @if(($c->account_status ?? 'active') === 'active')
+                                                <span class="badge bg-success">Active</span>
+                                            @else
+                                                <span class="badge bg-danger">Suspended</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ route('admin.showUser', $c->id) }}" class="btn btn-sm btn-outline-primary" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">
+                                            No contributor activity found.
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -188,110 +163,92 @@
         </div>
     </div>
 
-    <!-- Recent Activities -->
+    <!-- Recent Activities + Charts -->
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <h5 class="mb-0">
-                        <i class="fas fa-history text-info me-2"></i>Recent Activities
+                        <i class="fas fa-chart-pie text-success me-2"></i>Resource Types (by Category)
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item border-0 px-0 py-2">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <span class="avatar avatar-sm bg-primary rounded-circle">
-                                        <i class="fas fa-upload text-white"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="mb-0"><strong>Ahmad Ali</strong> uploaded "Database Design Notes"</p>
-                                    <small class="text-muted">10 minutes ago</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item border-0 px-0 py-2">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <span class="avatar avatar-sm bg-success rounded-circle">
-                                        <i class="fas fa-check text-white"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="mb-0"><strong>Admin</strong> approved 3 resources</p>
-                                    <small class="text-muted">1 hour ago</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item border-0 px-0 py-2">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <span class="avatar avatar-sm bg-warning rounded-circle">
-                                        <i class="fas fa-user-plus text-white"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="mb-0"><strong>New contributor</strong> registered: Fatimah Zara</p>
-                                    <small class="text-muted">3 hours ago</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <canvas id="resourceTypeChart" height="200"></canvas>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <h5 class="mb-0">
-                        <i class="fas fa-chart-pie text-success me-2"></i>Upload Statistics
+                        <i class="fas fa-chart-line text-info me-2"></i>Uploads (Last 12 Months)
                     </h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="uploadChart" height="200"></canvas>
+                    <canvas id="monthlyUploadsChart" height="200"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+@endsection
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Simple chart for upload statistics
-        const ctx = document.getElementById('uploadChart').getContext('2d');
-        const uploadChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Approved', 'Pending', 'Rejected'],
-                datasets: [{
-                    data: [85, 10, 5],
-                    backgroundColor: [
-                        '#10b981', // green
-                        '#f59e0b', // yellow
-                        '#ef4444'  // red
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
-                }
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ----- Chart 1: Resource Types (Donut) -----
+    const resourceTypes = @json($stats['resourceTypes'] ?? []);
+    const typeLabels = Object.keys(resourceTypes);
+    const typeValues = Object.values(resourceTypes);
+
+    const typeCtx = document.getElementById('resourceTypeChart').getContext('2d');
+    new Chart(typeCtx, {
+        type: 'doughnut',
+        data: {
+            labels: typeLabels.length ? typeLabels : ['No Data'],
+            datasets: [{
+                data: typeValues.length ? typeValues : [1],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
             }
-        });
-        
-        console.log('Admin dashboard loaded successfully');
+        }
     });
+
+    // ----- Chart 2: Monthly Uploads (Line) -----
+    const monthlyUploads = @json($stats['monthlyUploads'] ?? []);
+    const monthLabels = Array.from({length: monthlyUploads.length}, (_, i) => `M${i+1}`);
+
+    const monthCtx = document.getElementById('monthlyUploadsChart').getContext('2d');
+    new Chart(monthCtx, {
+        type: 'line',
+        data: {
+            labels: monthLabels.length ? monthLabels : ['No Data'],
+            datasets: [{
+                label: 'Uploads',
+                data: monthlyUploads.length ? monthlyUploads : [0],
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+});
 </script>
 @endpush
-
-@endsection

@@ -3,7 +3,8 @@
 @section('title', 'Subject Repository')
 
 @section('content')
-<section class="hero-wrap hero-wrap-2" style="background-image: url('{{ asset('studylab/images/bg_2.jpg') }}');">
+<section class="hero-wrap hero-wrap-2"
+style="background-image: url('{{ asset('uploads/ChatGPT Image Jan 13, 2026, 02_59_21 AM.png') }}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-center">

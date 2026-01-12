@@ -20,11 +20,13 @@ class Resource extends Model
         'qr_code_path',
         'access_token',
         'upload_date',
-        'uploader_id'
+        'uploader_id',
+        'review_status','rejection_notes','reviewed_at','reviewed_by'
     ];
 
     protected $casts = [
         'upload_date' => 'datetime',
+        'reviewed_at' => 'datetime',
     ];
 
     // Relationship with User (Uploader)

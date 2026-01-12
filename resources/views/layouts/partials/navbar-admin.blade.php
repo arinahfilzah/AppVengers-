@@ -19,20 +19,13 @@
                     <a href="{{ route('admin.contributor-activities') }}" class="nav-link">Contributors</a>
                 </li>
 
-                <li class="nav-item dropdown @if(Request::routeIs('admin.viewUsers') || Request::routeIs('admin.editUser')) active @endif">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        User Management
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('admin.viewUsers') }}">View Users</a>
-                        </li>
-                    </ul>
+                <li class="nav-item @if(Request::routeIs('admin.viewUsers') || Request::routeIs('admin.editUser')) active @endif">
+                    <a href="{{ route('admin.viewUsers') }}" class="nav-link">User Management</a>
                 </li>
 
-                <li class="nav-item @if(Request::routeIs('admin.verification')) active @endif">
+                <!-- <li class="nav-item @if(Request::routeIs('admin.verification')) active @endif">
                     <a href="{{ route('admin.verification') }}" class="nav-link">Verification</a>
-                </li>
+                </li> -->
 
                 <li class="nav-item @if(Request::routeIs('admin.reviews')) active @endif">
                     <a href="{{ route('admin.reviews') }}" class="nav-link">Reviews</a>
