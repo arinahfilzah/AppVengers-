@@ -159,6 +159,7 @@
       <li><a href="resources/views/course/course-subject.blade.php"> Course Subject View</a></li>  
       <li><a href="resources/views/course/course.blade.php"> Subject View</a></li>  
       <li><a href="resources/views/resource/qrError.blade.php"> Qr Error View</a></li>  
+      <li><a href="resources/views/resource/viewResource.blade.php"> View Resource via QR</a></li>  
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
@@ -216,6 +217,21 @@
     <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href="resources/views/resource/search.blade.php"> Search Page </a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href=""></a>
+    </td>
+  </tr>
+
+   <tr>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Premium Plan and Mock Payment Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+      <a href="app/Models/MockPayment.php"> MockPayment Model </a>
+    
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>

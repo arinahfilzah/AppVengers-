@@ -5,10 +5,10 @@
 @section('content')
 <div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('studylab/images/softpurple.jpg') }}');">
     <div class="overlay"></div>
-    <div class="container" ></div>
+    <div class="container"></div>
 </div>
 
-<section class="ftco-section ftco-no-pb ftco-no-pt" >
+<section class="ftco-section ftco-no-pb ftco-no-pt">
     <div class="container">
         <div class="row">
 
@@ -18,93 +18,95 @@
                 <div class="login-wrap p-4 p-md-5">
                     <h3 class="mb-4">Upload Your Resource</h3>
 
-                   <form action="{{ route('uploadResource.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+                    <form action="{{ route('uploadResource.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
 
-    <div class="form-group">
-        <label for="file1">Upload File</label>
-        <input type="file" class="form-control" name="file1" id="file1" required>
-        @error('file1')
-            <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-    </div>
+                    
 
-    <div class="form-group">
-        <label>Resource Title</label>
-        <input type="text" class="form-control" name="title" required>
-        @error('title')
-            <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-    </div>
+                        <div class="form-group">
+                            <label for="file1">Upload File</label>
+                            <input type="file" class="form-control" name="file1" id="file1" required>
+                            @error('file1')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-    <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control" name="description"></textarea>
-    </div>
+                        <div class="form-group">
+                            <label>Resource Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                            @error('title')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-    <div class="form-group">
-        <label>Category</label>
-        <select class="form-control" name="category">
-            <option>Software Engineering</option>
-            <option>Data Engineering</option>
-            <option>Computer Network & Security</option>
-            <option>Bioinformatic</option>
-            <option>Graphic & Multimedia</option>
-        </select>
-    </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" name="description"></textarea>
+                        </div>
 
-    <div class="form-group">
-        <label>Year</label>
-        <select class="form-control" name="year" required>
-            <option>Year 1</option>
-            <option>Year 2</option>
-            <option>Year 3</option>
-            <option>Year 4</option>
-        </select>
-    </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-control" name="category">
+                                <option>Software Engineering</option>
+                                <option>Data Engineering</option>
+                                <option>Computer Network & Security</option>
+                                <option>Bioinformatic</option>
+                                <option>Graphic & Multimedia</option>
+                            </select>
+                        </div>
 
-    <div class="form-group">
-    <label>Subject</label>
-    <select class="form-control subject-select" name="subject" required>
-        <option value="" disabled selected>Select or search subject</option>
+                        <div class="form-group">
+                            <label>Year</label>
+                            <select class="form-control" name="year" required>
+                                <option>Year 1</option>
+                                <option>Year 2</option>
+                                <option>Year 3</option>
+                                <option>Year 4</option>
+                            </select>
+                        </div>
 
-        <!-- Existing subjects -->
-        <option>Discrete Structure</option>
-        <option>Programming Technique I</option>
-        <option>Programming Technique II</option>
-        <option>Technology & Information System</option>
-        <option>Digital Logic</option>
-        <option>Integrity and Anti-Corruption</option>
-        <option>Computational Mathematics</option>
-        <option>Software Engineering</option>
-        <option>Probability & Statiscal Data Analysis</option>
-        <option>Computer Organisation & Architecture</option>
-        <option>Database</option>
-        <option>System Analysis & Design</option>
-        <option>Data Structure & Algoritm</option>
-        <option>Network Communications</option>
-        <option>Computer Security</option>
-        <option>Human Computer Interaction</option>
-        <option>Object-Oriented Programming</option>
-        <option>Requirements Engineering & Software Modelling</option>
-        <option>Theory of Computer Science</option>
-        <option>Operating Systems</option>
-        <option>Web Programming</option>
-        <option>Application Development</option>
-        <option>Professional Communication Skill I</option>
-        <option>Professional Communication Skill II</option>
-        <option>Professional Communication Skill III</option>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select class="form-control subject-select" name="subject" required>
+                                <option value="" disabled selected>Select or search subject</option>
 
-        <!-- Add new button -->
-        <option value="add_new">+ Add New Subject</option>
-    </select>
-</div>
+                                <!-- Existing subjects -->
+                                <option>Discrete Structure</option>
+                                <option>Programming Technique I</option>
+                                <option>Programming Technique II</option>
+                                <option>Technology & Information System</option>
+                                <option>Digital Logic</option>
+                                <option>Integrity and Anti-Corruption</option>
+                                <option>Computational Mathematics</option>
+                                <option>Software Engineering</option>
+                                <option>Probability & Statiscal Data Analysis</option>
+                                <option>Computer Organisation & Architecture</option>
+                                <option>Database</option>
+                                <option>System Analysis & Design</option>
+                                <option>Data Structure & Algoritm</option>
+                                <option>Network Communications</option>
+                                <option>Computer Security</option>
+                                <option>Human Computer Interaction</option>
+                                <option>Object-Oriented Programming</option>
+                                <option>Requirements Engineering & Software Modelling</option>
+                                <option>Theory of Computer Science</option>
+                                <option>Operating Systems</option>
+                                <option>Web Programming</option>
+                                <option>Application Development</option>
+                                <option>Professional Communication Skill I</option>
+                                <option>Professional Communication Skill II</option>
+                                <option>Professional Communication Skill III</option>
+
+                                <!-- Add new button -->
+                                <option value="add_new">+ Add New Subject</option>
+                            </select>
+                        </div>
 
 
-    <button type="submit" class="btn btn-primary submit">
-        <span class="fa fa-upload"></span> Upload
-    </button>
-</form>
+                        <button type="submit" class="btn btn-primary submit">
+                            <span class="fa fa-upload"></span> Upload
+                        </button>
+                    </form>
 
                     </form>
 
@@ -112,13 +114,13 @@
 
                     @if(session('success'))
                     <script>
-                    Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: "{{ session('success') }}",
-                    timer: 2000,
-                    showConfirmButton: false
-                    });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: "{{ session('success') }}",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     </script>
                     @endif
 
@@ -155,7 +157,7 @@
             width: '100%'
         });
 
-        $('.subject-select').on('change', function () {
+        $('.subject-select').on('change', function() {
             if ($(this).val() === 'add_new') {
                 alert("You selected: Add New Subject");
                 // Here you can open a modal or redirect to page

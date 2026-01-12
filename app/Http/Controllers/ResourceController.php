@@ -575,6 +575,6 @@ class ResourceController extends Controller
 
     private function canEdit(Resource $resource)
     {
-        return $resource->uploader_id === auth()->id() ||$resource->collaborators->contains('id', auth()->id());
+        return $resource->uploader_id === auth()->id() || $resource->collaborators->contains('id', auth()->id());
     }
 }
