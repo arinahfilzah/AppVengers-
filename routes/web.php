@@ -12,6 +12,7 @@ use App\Http\Controllers\PremiumController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\CollaborationController;
+use App\Http\Controllers\RecommendationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -249,4 +250,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/analytics/performance/data', [AnalyticsController::class, 'getPerformanceData'])->name('analytics.performance.data');
     Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
     Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
+});
+
+// Recommendation Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/recommendations', [RecommendationController::class, 'index'])
+        ->name('recommendations.index');
 });

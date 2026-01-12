@@ -13,6 +13,7 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
+use App\Models\UserActivity;
 
 
 
@@ -261,6 +262,13 @@ class ResourceController extends Controller
                 return redirect()->back()->with('error', 'File cannot be opened on this device.');
             }
 
+            // ✅ Log the download activity
+            UserActivity::create([
+                'user_id' => auth()->id(),
+                'subject' => $resource->subject,
+                'action' => 'downloaded',
+            ]);
+
             //  Download file
             return response()->download($path, 'v' . $versionNumber . '_' . basename($version->file_path));
         } catch (\Exception $e) {
@@ -443,6 +451,16 @@ class ResourceController extends Controller
                 ]);
             }
 
+            // User Activity Logging for Subsystem 3 AI recommendation Sprint 3
+
+            UserActivity::create([
+            'user_id' => auth()->id(),
+            'subject' => $resource->subject,
+            'action' => 'viewed',
+            ]);
+
+            // end subsystem 3
+
             return view('resource.viewResource', compact('resource'));
         } catch (\Exception $e) {
             return view('resource.qrError', [
@@ -460,6 +478,14 @@ class ResourceController extends Controller
             return redirect()->back()->with('error', 'File cannot be opened on this device.');
         }
 
+        // ✅ Log the download activity (Subsystem 3 AI recommendation Sprint 3)
+        UserActivity::create([
+        'user_id' => auth()->id(),
+        'subject' => $resource->subject,
+        'action' => 'downloaded',
+        ]);
+
+
         return response()->download($path);
     }
 
@@ -469,6 +495,14 @@ class ResourceController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $keyword = $request->search;
+
+            // Log the search activity
+            UserActivity::create([
+                'user_id' => auth()->id(),
+                'subject' => $keyword,
+                'action' => 'searched',
+            ]);
+
             $query->where(function ($q) use ($keyword) {
                 $q->where('title', 'like', "%{$keyword}%")
                     ->orWhere('subject', 'like', "%{$keyword}%")
