@@ -261,7 +261,7 @@
 
   <tr>
     <td style="border: 1px solid #999; padding: 8px;">2</td>
-    <td style="border: 1px solid #999; padding: 8px;">Premium Plan and Mock Payment Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">AI Recommendation Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
         <ul>
         <li><a href="resources/views/recommendations/index.blade.php"> Recommendation Page</a></li>
