@@ -254,6 +254,7 @@
     <ul>
       <li><a href="app/Models/MockPayment.php"> Mock Payment Database</a></li>
       <li><a href="app/Models/PremiumPlan.php"> Premium Plan Database</a></li>
+      <li><a href="app/Models/User.php"> User Database (add attributes for premium and payment)</a></li>
     </ul>
     </td>
   </tr>
