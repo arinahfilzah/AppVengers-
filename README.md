@@ -214,12 +214,16 @@
 
    <tr>
     <td style="border: 1px solid #999; padding: 8px;">1</td>
-    <td style="border: 1px solid #999; padding: 8px;">Smart Search and Filtering Module</td>
+    <td style="border: 1px solid #999; padding: 8px;"> Smart Search and Filtering Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="resources/views/resource/search.blade.php"> Search Page </a>
+    <ul>
+      <li><a href="resources/views/resource/search.blade.php"> Search Page </a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+    <ul>
+      <li><a href="app/Http/Controllers/ResourceController.php"> Search and Filter Controller(COmbine in Resource Controller)</a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <a href=""></a>
@@ -230,14 +234,47 @@
     <td style="border: 1px solid #999; padding: 8px;">2</td>
     <td style="border: 1px solid #999; padding: 8px;">Premium Plan and Mock Payment Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href="app/Models/MockPayment.php"> MockPayment Model </a>
-    
+    <ul>
+      <li><a href="resources/views/premium/checkout.blade.php"> Checkout Page</a></li>
+      <li><a href="resources/views/premium/plans.blade.php"> Premium Plan Page</a></li>
+      <li><a href="resources/views/premium/success.blade.php"> Payment Successful Page</a></li>
+      <li><a href="resources/views/partials/premium-badge.blade.php"> Premium Badge UI</a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+    <ul>
+      <li><a href="app/Http/Controllers/PaymentController.php"> Mock Payment Controller</a></li>
+      <li><a href="app/Http/Controllers/PremiumController.php"> Premium Plan Controller</a></li>
+      <li><a href="app/Services/PaymentService.php"> Payment Service</a></li>
+      <li><a href="app/Services/PremiumService.php"> Premium Service</a></li>
+      <li><a href="app/Http/Middleware/CheckPremium.php"> Premium Checker</a></li>
+    </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+    <ul>
+      <li><a href="app/Models/MockPayment.php"> Mock Payment Database</a></li>
+      <li><a href="app/Models/PremiumPlan.php"> Premium Plan Database</a></li>
+    </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: 1px solid #999; padding: 8px;">2</td>
+    <td style="border: 1px solid #999; padding: 8px;">Premium Plan and Mock Payment Module</td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+        <li><a href="resources/views/recommendations/index.blade.php"> Recommendation Page</a></li>
+        </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+        <li><a href="app/Http/Controllers/RecommendationController.php"> Recommendation Controller</a></li>
+        </ul>
+    </td>
+    <td style="border: 1px solid #999; padding: 8px;">
+        <ul>
+        <li><a href="app/Models/UserActivity.php"> User Activity Database</a></li>
+        </ul>
     </td>
   </tr>
 </table>
