@@ -243,7 +243,7 @@
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
     <ul>
-      <li><a href="app/Http/Controllers/PaymentController.php"> Mock Payment Controller</a></li>
+      <li><a href="app/Http/Controllers/PaymentController.php"> Payment Controller</a></li>
       <li><a href="app/Http/Controllers/PremiumController.php"> Premium Plan Controller</a></li>
       <li><a href="app/Services/PaymentService.php"> Payment Service</a></li>
       <li><a href="app/Services/PremiumService.php"> Premium Service</a></li>
@@ -252,7 +252,7 @@
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
     <ul>
-      <li><a href="app/Models/MockPayment.php"> Mock Payment Database</a></li>
+      <li><a href="app/Models/PremiumTransaction.php"> Payment History Database</a></li>
       <li><a href="app/Models/PremiumPlan.php"> Premium Plan Database</a></li>
       <li><a href="app/Models/User.php"> User Database (add attributes for premium and payment)</a></li>
     </ul>
