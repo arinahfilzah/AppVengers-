@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\PremiumPlan;
-use App\Models\MockPayment;
+use App\Models\PremiumTransaction;
 use Illuminate\Support\Str;
 
 class PaymentService
@@ -29,31 +29,29 @@ class PaymentService
         $user->wallet_balance = $balanceAfter;
 
         // Upgrade to premium
+        $user->is_premium = true;
+        $user->premium_expiry = now()->addDays($plan->duration_days);
         $user->account_type = 'premium';
         $user->premium_expires_at = now()->addDays($plan->duration_days);
+        $user->premium_plan_id = $plan->id;
         $user->save();
     }
 
     // Create payment record
-    $payment = MockPayment::create([
+    $payment = PremiumTransaction::create([
         'user_id' => $user->id,
         'plan_id' => $plan->id,
         'transaction_id' => $transactionId,
         'amount' => $plan->price,
-        'currency' => 'MYR',
         'status' => $status,
         'payment_method' => 'credit_card',
-        'card_last_four' => substr(str_replace(' ', '', $paymentData['card_number']), -4),
-        'card_brand' => $this->getCardBrand($paymentData['card_number']),
         'balance_before' => $balanceBefore,
         'balance_after' => $balanceAfter,
-        'payment_details' => [
-            'card_number' => $paymentData['card_number'],
-            'expiry_month' => $paymentData['expiry_month'],
-            'expiry_year' => $paymentData['expiry_year'],
-            'cvc' => $paymentData['cvc'],
-            'cardholder_name' => $paymentData['cardholder_name'],
-        ],
+        'notes' => json_encode([
+        'card_last_four' => substr(str_replace(' ', '', $paymentData['card_number']), -4),
+        'card_brand' => $this->getCardBrand($paymentData['card_number']),
+        'cardholder_name' => $paymentData['cardholder_name'],
+        ]),
         'processed_at' => now(),
     ]);
 

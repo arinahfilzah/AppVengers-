@@ -53,7 +53,7 @@ class PremiumController extends Controller
     // Show payment success page
     public function success()
     {
-        $payment = auth()->user()->mockPayments()->latest()->first();
+        $payment = auth()->user()->premiumTransactions()->latest()->first();
 
         return view('premium.success', compact('payment'));
     }

@@ -33,6 +33,10 @@ class User extends Authenticatable
         'account_status',
         'suspended_reason',
         'wallet_balance',
+        'is_premium',
+        'premium_expiry',
+        'account_type',
+        'premium_expires_at',
     ];    
 
     /**
@@ -56,6 +60,8 @@ class User extends Authenticatable
         'premium_expires_at' => 'datetime',
         'trusted_devices' => 'array',
         'security_notifications' => 'boolean',
+        'is_premium' => 'boolean',
+        'premium_expiry' => 'datetime',
     ];    
 
     /**
@@ -117,5 +123,16 @@ class User extends Authenticatable
     {
         $this->wallet_balance -= $amount;
         $this->save();
+    }
+
+    // ✅ ADD this relationship (keep mockPayments too)
+    public function premiumTransactions()
+    {
+        return $this->hasMany(PremiumTransaction::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->belongsTo(PremiumPlan::class, 'premium_plan_id');
     }
 }

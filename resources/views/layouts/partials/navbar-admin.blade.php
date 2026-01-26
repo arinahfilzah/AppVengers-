@@ -31,6 +31,17 @@
                     <a href="{{ route('admin.reviews') }}" class="nav-link">Reviews</a>
                 </li>
 
+                <!-- Premium Management Dropdown -->
+                <li class="nav-item dropdown @if(Request::routeIs('admin.premium.*')) active @endif">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa fa-crown me-1"></i> Premium
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('admin.premium.transactions') }}">Transactions</a></li>
+                        <li><a class="dropdown-item" href="{{ route('admin.premium.analytics') }}">Analytics</a></li>
+                    </ul>
+                </li>
+
                 <!-- Subject Reports -->
                 <li class="nav-item @if(Request::routeIs('admin.analytics.subjectreport')) active @endif">
                     <a href="{{ route('admin.analytics.subjectreport') }}" class="nav-link">

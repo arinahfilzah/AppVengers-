@@ -1,27 +1,22 @@
 <?php
-// DEBUG: Test if file loads
-Route::get('/debug-test', function() {
-    return "Routes file is loading!";
-});
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PremiumAdminController;
 use App\Http\Controllers\PremiumController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\CollaborationController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\AnalyticsController;
-use App\Http\Controllers\SubjectReportController;
 
 /*
 |--------------------------------------------------------------------------
 | Landing Page
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', function () {
     return view('home');
 })->name('home');
@@ -43,6 +38,13 @@ Route::get('/reset-password', [AuthController::class, 'showResetPasswordForm'])-
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Public QR Access (No Login)
+|--------------------------------------------------------------------------
+*/
+Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('resource.view');
 
 /*
 |--------------------------------------------------------------------------
@@ -77,22 +79,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/resource/{id}/generate-qr', [ResourceController::class, 'generateQrCode'])->name('resource.generateQr');
     Route::get('/resource/{id}/download-qr', [ResourceController::class, 'downloadQrCode'])->name('resource.downloadQr');
 
-    // Version Control Routes
-    Route::get('/resource/{id}/versions', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
-    Route::get('/resource/{resourceId}/version/{versionNumber}/download', [ResourceController::class, 'downloadVersion'])->name('resource.downloadVersion');
-    Route::post('/resource/{resourceId}/version/{versionNumber}/restore', [ResourceController::class, 'restoreVersion'])->name('resource.restoreVersion');
-
+    // Download
     Route::get('/resource/{id}/download', [ResourceController::class, 'downloadResource'])->name('resource.download');
 
-    // Show update version form
+    // Version Control Routes (ALL IN ONE PLACE - NO DUPLICATES)
+    Route::get('/resource/{id}/versions', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
+    Route::get('/resource/{resource}/version/{version}/download', [ResourceController::class, 'downloadVersion'])->name('resource.downloadVersion');
+    Route::get('/resource/{resource}/version/{version}/view', [ResourceController::class, 'viewVersion'])->name('resource.viewVersion');
+    Route::post('/resource/{resource}/version/{version}/restore', [ResourceController::class, 'restoreVersion'])->name('resource.restoreVersion');
+    
+    // Update version
     Route::get('/resource/{id}/update-version', [ResourceController::class, 'showUpdateVersionForm'])->name('resource.updateVersionForm');
-
-    // Save new version
-    Route::post('/resource/{id}/update-version', [ResourceController::class, 'storeNewVersion'])->name('resource.storeNewVersion');
-
-    // view resource history
-    Route::get('/resource/{id}/history', [ResourceController::class, 'showVersionHistory'])->name('resource.versionHistory');
-
+    Route::post('/resource/{id}/new-version', [ResourceController::class, 'storeNewVersion'])->name('resource.storeNewVersion');
 
     /*
     |--------------------------------------------------------------------------
@@ -109,85 +107,33 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('/search', [ResourceController::class, 'search'])->name('resource.search');
 
-    // Premium routes
+    /*
+    |--------------------------------------------------------------------------
+    | Premium Routes (User)
+    |--------------------------------------------------------------------------
+    */
     Route::get('/premium', [PremiumController::class, 'plans'])->name('premium.plans');
     Route::get('/premium/checkout/{plan}', [PremiumController::class, 'checkout'])->name('premium.checkout');
     Route::get('/premium/success', [PremiumController::class, 'success'])->name('premium.success');
-
-    // Payment processing
     Route::post('/premium/process', [PaymentController::class, 'process'])->name('premium.process');
 
-    // Test route (legacy)
-    Route::get('/premium-test', function() {
-        return view('premium.test-page');
-    });
-});
+    /*
+    |--------------------------------------------------------------------------
+    | Collaboration Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/collaboration/request/{resource}', [CollaborationController::class, 'requestCollaboration'])->name('collaboration.request');
+    Route::get('/collaboration/requests', [CollaborationController::class, 'viewRequests'])->name('collaboration.requests');
+    Route::post('/collaboration/approve/{request}', [CollaborationController::class, 'approveRequest'])->name('collaboration.approve');
+    Route::post('/collaboration/reject/{request}', [CollaborationController::class, 'rejectRequest'])->name('collaboration.reject');
+    Route::get('/collaboration/my-requests', [CollaborationController::class, 'myRequests'])->name('collaboration.myRequests');
 
-/*
-|--------------------------------------------------------------------------
-| Public QR Access (No Login)
-|--------------------------------------------------------------------------
-*/
-Route::get('/r/{token}', [ResourceController::class, 'viewByQrCode'])->name('resource.view');
-
-
-/*
-|--------------------------------------------------------------------------
-| Version History
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth'])->group(function () {
-
-    // NF5: View version history
-    Route::get('/resource/{id}/versions', [ResourceController::class, 'showVersionHistory'])
-        ->name('resource.versionHistory');
-
-    // NF10: Download specific version
-    Route::get('/resource/{resource}/version/{version}/download', [ResourceController::class, 'downloadVersion'])
-        ->name('resource.downloadVersion');
-
-    // NF10: View specific version file (NEW)
-    Route::get('/resource/{resource}/version/{version}/view', [ResourceController::class, 'viewVersion'])
-        ->name('resource.viewVersion');
-
-    // Restore version (Owner only)
-    Route::post('/resource/{resource}/version/{version}/restore', [ResourceController::class, 'restoreVersion'])
-        ->name('resource.restoreVersion');
-
-    Route::post('/resource/{id}/new-version', [ResourceController::class, 'storeNewVersion'])
-    ->name('resource.storeNewVersion');
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Collaboration Routes (Protected by Auth Middleware)
-|--------------------------------------------------------------------------
-*/
-// Collaboration Request Routes (Protected by auth middleware)
-Route::middleware(['auth'])->group(function () {
-
-    // Request collaboration access
-    Route::post('/collaboration/request/{resource}', [CollaborationController::class, 'requestCollaboration'])
-        ->name('collaboration.request');
-
-    // View pending collaboration requests (for resource owner)
-    Route::get('/collaboration/requests', [CollaborationController::class, 'viewRequests'])
-        ->name('collaboration.requests');
-
-    //  Approve collaboration request
-    Route::post('/collaboration/approve/{request}', [CollaborationController::class, 'approveRequest'])
-        ->name('collaboration.approve');
-
-    // Reject collaboration request
-    Route::post('/collaboration/reject/{request}', [CollaborationController::class, 'rejectRequest'])
-        ->name('collaboration.reject');
-
-    // View user's own collaboration requests
-    Route::get('/collaboration/my-requests', [CollaborationController::class, 'myRequests'])
-        ->name('collaboration.myRequests');
+    /*
+    |--------------------------------------------------------------------------
+    | Recommendations
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations.index');
 });
 
 /*
@@ -208,7 +154,7 @@ Route::prefix('admin')
         Route::get('/stats/dashboard', [AdminController::class, 'getDashboardStats'])->name('stats.dashboard');
         Route::get('/stats/contributors', [AdminController::class, 'getContributors'])->name('stats.contributors');
 
-        // Verification (if you have these methods in AdminController)
+        // Verification
         Route::get('/verification', function () {
             return view('admin.verification');
         })->name('verification');
@@ -216,10 +162,10 @@ Route::prefix('admin')
         Route::post('/verification/{id}/reject', [AdminController::class, 'rejectVerification'])->name('verification.reject');
         Route::post('/verification/{id}/request-info', [AdminController::class, 'requestInfoVerification'])->name('verification.requestInfo');
 
-        // ✅ Reviews (Content Review)
+        // Reviews (Content Review)
         Route::get('/reviews', [AdminController::class, 'reviews'])->name('reviews');
         Route::get('/reviews/{id}/preview', [AdminController::class, 'previewContent'])->name('reviews.preview');
-        Route::post('/reviews/{id}/approve', [AdminController::class, 'approveContent'])->name('reviews.approve');
+        Route::post('/resources/{id}/approve', [AdminController::class, 'approveContent'])->name('resources.approve');
         Route::post('/reviews/{id}/remove', [AdminController::class, 'removeContent'])->name('reviews.remove');
 
         // User Management
@@ -230,32 +176,51 @@ Route::prefix('admin')
         Route::post('/users/{id}/suspend', [AdminController::class, 'suspendUser'])->name('suspendUser');
         Route::post('/users/{id}/reactivate', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
 
-        // ✅ Analytics - Subject report
-        // ✅ Analytics - Subject Reports (UC08)
-        Route::get('/analytics/subjectreport', [AdminController::class, 'subjectReportPage'])
-            ->name('analytics.subjectreport');
+        // Analytics - Subject Reports
+        Route::get('/analytics/subjectreport', [AdminController::class, 'subjectReportPage'])->name('analytics.subjectreport');
+        Route::get('/analytics/subjectreport/data', [AdminController::class, 'subjectReportData'])->name('analytics.subjectreport.data');
+        Route::get('/analytics/subjectreport/export', [AdminController::class, 'exportSubjectReport'])->name('analytics.subjectreport.export');
 
-        Route::get('/analytics/subjectreport/data', [AdminController::class, 'subjectReportData'])
-            ->name('analytics.subjectreport.data');
-
-        Route::get('/analytics/subjectreport/export', [AdminController::class, 'exportSubjectReport'])
-            ->name('analytics.subjectreport.export');
-
-        // ✅ Analytics - Performance (DB version)
+        // Analytics - Performance
         Route::get('/analytics/performance', [AdminController::class, 'performancePage'])->name('analytics.performance');
         Route::get('/analytics/performance/data', [AdminController::class, 'performanceData'])->name('analytics.performance.data');
         Route::get('/analytics/performance/export', [AdminController::class, 'exportPerformanceReport'])->name('analytics.performance.export');
 
-        // If you still use AnalyticsController export/pdf/excel (optional)
+        // Analytics - Legacy
         Route::post('/analytics/generate', [AnalyticsController::class, 'generateReport'])->name('analytics.generate');
         Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPDF'])->name('analytics.export.pdf');
         Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
+
+        // Premium Management
+        Route::prefix('premium')->name('premium.')->group(function () {
+            // Dashboard
+            Route::get('/management', [PremiumAdminController::class, 'management'])->name('management');
+            
+            // Plans CRUD
+            Route::get('/plans', [PremiumAdminController::class, 'plans'])->name('plans');
+            Route::post('/plans/add', [PremiumAdminController::class, 'addPlan'])->name('add-plan');
+            Route::put('/plans/{id}/update', [PremiumAdminController::class, 'updatePlan'])->name('update-plan');
+            Route::delete('/plans/{id}/delete', [PremiumAdminController::class, 'deletePlan'])->name('delete-plan');
+            Route::post('/plans/{id}/toggle-status', [PremiumAdminController::class, 'togglePlanStatus'])->name('toggle-plan-status');
+            
+            // Transactions
+            Route::get('/transactions', [PremiumAdminController::class, 'transactions'])->name('transactions');
+            Route::get('/transactions/{id}', [PremiumAdminController::class, 'viewTransaction'])->name('transaction');
+            Route::post('/transactions/{id}/refund', [PremiumAdminController::class, 'refundTransaction'])->name('refund-transaction');
+            
+            // Subscriptions
+            Route::get('/subscriptions', [PremiumAdminController::class, 'subscriptions'])->name('subscriptions');
+            Route::get('/subscriptions/plan/{planId}', [PremiumAdminController::class, 'planSubscriptions'])->name('subscriptions.plan');
+            Route::post('/subscriptions/{userId}/extend', [PremiumAdminController::class, 'extendSubscription'])->name('extend-subscription');
+            Route::post('/subscriptions/{userId}/cancel', [PremiumAdminController::class, 'cancelSubscription'])->name('cancel-subscription');
+            Route::post('/subscriptions/{userId}/manual-add', [PremiumAdminController::class, 'manualAddSubscription'])->name('manual-add-subscription');
+            
+            // Analytics
+            Route::get('/analytics', [PremiumAdminController::class, 'analytics'])->name('analytics');
+            Route::get('/revenue-report', [PremiumAdminController::class, 'revenueReport'])->name('revenue-report');
+            
+            // Settings
+            Route::get('/settings', [PremiumAdminController::class, 'settings'])->name('settings');
+            Route::post('/settings/update', [PremiumAdminController::class, 'updateSettings'])->name('update-settings');
+        });
     });
-
-
-// Recommendation Routes (NOT admin)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/recommendations', [RecommendationController::class, 'index'])
-        ->name('recommendations.index');
-});
-

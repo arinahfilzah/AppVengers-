@@ -29,6 +29,24 @@ class PremiumPlan extends Model
     // Get formatted price
     public function getFormattedPriceAttribute()
     {
-        return 'LKR ' . number_format($this->price, 2);
+        return 'RM ' . number_format($this->price, 2);
+    }
+
+    // ✅ ADD these to your existing PremiumPlan model
+    public function transactions()
+    {
+        return $this->hasMany(PremiumTransaction::class, 'plan_id');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(User::class, 'premium_plan_id');
+    }
+
+    public function activeSubscriptions()
+    {
+        return $this->hasMany(User::class, 'premium_plan_id')
+            ->where('is_premium', true)
+            ->where('premium_expiry', '>', now());
     }
 }
