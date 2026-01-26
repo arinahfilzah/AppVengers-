@@ -113,11 +113,6 @@ class User extends Authenticatable
         return now()->diffInDays($this->premium_expires_at, false);
     }
 
-    // Relationship with mock payments
-    public function mockPayments()
-    {
-        return $this->hasMany(MockPayment::class);
-    }
 
     public function deductBalance($amount)
     {
