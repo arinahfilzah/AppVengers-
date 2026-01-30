@@ -324,7 +324,6 @@
         <ul>
         <li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></li>
         <li><a href="app/Http/Controllers/PremiumAdminController.php">Admin Premium Plan Controller</a></li>
-        <li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></li>
         </ul>    
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
