@@ -300,7 +300,7 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+        <ul><li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></ul></li>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
@@ -321,9 +321,11 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
-        <a href="app/Http/Controllers/PremiumAdminController.php">Admin Premium Plan Controller</a>
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+        <ul>
+        <li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></li>
+        <li><a href="app/Http/Controllers/PremiumAdminController.php">Admin Premium Plan Controller</a></li>
+        <li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></li>
+        </ul>    
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul> 
@@ -345,7 +347,7 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+        <ul><li><a href="app/Http/Controllers/AdminController.php">Admin Controller</a></ul></li>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
