@@ -303,7 +303,11 @@
         <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <ul>
+        <li>
+            <a href="https://github.com/arinahfilzah/AppVengers-/blob/main/app/Models/User.php">User Database</a>
+        </li>
+      </ul>
     </td>
   </tr>
 
@@ -312,15 +316,22 @@
     <td style="border: 1px solid #999; padding: 8px;">Content Moderation & User Management Module</td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-      <li><a href="resources/views/admin/verification.blade.php"> Verify Contributors Page </a></li>
-      <li><a href="resources/views/admin/reviews.blade.php"> Review Content Page </a></li>
+      <li><a href="resources/views/admin/verification.blade.php"> View Premium Plan Transaction Analytics Page </a></li>
+      <li><a href="resources/views/admin/reviews.blade.php"> Review and Remove Inappropriate Content Page </a></li>
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller></a>
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
+        <a href="app/Http/Controllers/PremiumAdminController.php">Admin Premium Plan Controller</a>
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <ul> 
+          <li><a href="app/Models/PremiumTransaction.php"> Payment History Database</a></li>
+          <li><a href="app/Models/PremiumPlan.php"> Premium Plan Database</a></li>
+          <li><a href="app/Models/User.php"> User Database</a></li>
+          <li><a href="app/Models/Resource.php"> Resource Database</a></li>
+      </ul>
     </td>
   </tr>
 
@@ -334,10 +345,12 @@
     </ul>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-        <a href="app/Http/Controllers/AdminController.php">Admin Controller></a>
+        <a href="app/Http/Controllers/AdminController.php">Admin Controller</a>
     </td>
     <td style="border: 1px solid #999; padding: 8px;">
-      <a href=""></a>
+      <ul>
+      <li><a href="app/Models/Resource.php"> Resource Database</a></li>
+      </ul>
     </td>
   </tr>
   
